@@ -1,0 +1,40 @@
+<div class="devStats plainBorder">
+	<button ng-click="getUserInfo()">getUserInfo</button>
+	<br><br>
+	<p>login response: {{responseStatus}}</p>
+	<p>{{loginResponse}}</p>
+	<h3>Dev Stats</h3>
+	<!-- device data -->
+	Device Ready: <span class="deviceReadyStat">{{devStats.deviceReady}}</span>
+	<br>
+	User Agent: <span class="userAgentStat">{{devStats.userAgent}}</span>
+	<br>
+	Screen Dimensions (pixels): <span class="screenDimensionsStat">{{devStats.screenDimensions}}</span>
+	<br>
+	Window Dimensions (pixels): <span class="windowDimensionsStat">{{devStats.windowDimensions}}</span>
+	<br>
+	Device Orientation: <span class="deviceOrientationStat">{{devStats.deviceOrientation}}</span>
+	<br>
+	<br>
+	<!-- user data -->
+	UserID: <span class="userIDStat">{{userID}}</span>
+	<br>
+	User Email: <span class="userEmailStat">{{devStats.userEmail}}</span>
+	<br>
+	<br>
+	Welcome back, <span>{{userID}}</span><br>
+	<span>You have $500 left in your monthly budget</span><br>
+	<span>Your productivity over the past week is at 47%</span><br>
+	<span>Your habit score over the past week is 55%</span><br>
+	<span>It is 60 degrees outside, and sunny.</span><br>
+	<br>
+	
+</div>
+<div id="container2">
+	<div class="jsConsole"></div>
+	<div class="buttonArea">
+		<button ng-click="logout()" id="logoutButton" type="button">log out</button>
+	</div>
+</div>
+<br>
+<br>

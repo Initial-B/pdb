@@ -1,0 +1,13 @@
+<div>userID: {{userID}}</div>
+<div>lastUserID: {{lastUserID}}</div>
+<div>sessionID: {{sessionID}}</div>
+<div>isLoggedIn: {{isLoggedIn}}</div>
+<br>
+<br>
+<ng-include src="'home/devStats.html'" ng-if="isLoggedIn"></ng-include>
+<ng-include src="'login/loginForm.html'" ng-if="!isLoggedIn"></ng-include>
+<ng-include ng-if="isLoggedIn">
+	<button ng-click="logout()" id="logoutButton" type="button">log out</button>
+</ng-include>
+<br>
+<br>
