@@ -30,7 +30,7 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 				requireLogin: true
 			}
 		})
-		.state('arena',{
+		.state('habits',{
 			url: '/habits',
 			templateUrl: 'arena/arena-matches.html',
 			controller: 'ArenaCtrl',

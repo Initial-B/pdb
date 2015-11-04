@@ -43,7 +43,7 @@
 		function login(uID, password){
 			//console.log('entered userAPI with userID: ' + uID + ' password: ' + password);
 			return $http({
-				url: 'http://apsis.me/Hearthboard/lib/SessionUtil/SessionUtil_cc.php',
+				url: 'http://apsis.me/PDB/lib/SessionUtil/SessionUtil_cc.php',
 				method: 'POST',
 				//withCredentials: true,
 				data: {
@@ -71,7 +71,7 @@
 		//end current user session and set userID to empty string
 		function logout(uID, sID){
 			return $http({
-				url: 'http://apsis.me/Hearthboard/lib/SessionUtil/SessionUtil_cc.php',
+				url: 'http://apsis.me/PDB/lib/SessionUtil/SessionUtil_cc.php',
 				method: 'POST',
 				//withCredentials: true,
 				data: {
@@ -97,7 +97,7 @@
 		
 		function getUserInfo(uID, sID){
 			return $http({
-				url: 'http://apsis.me/Hearthboard/lib/SessionUtil/SessionUtil_cc.php',
+				url: 'http://apsis.me/PDB/lib/SessionUtil/SessionUtil_cc.php',
 				method: 'POST',
 				//withCredentials: true,
 				data: {
