@@ -2,7 +2,7 @@
     'use strict';
 
     var serviceID = 'userAPI';
-	var ns = 'hearthboard.' + serviceID;
+	var ns = 'pdb.' + serviceID;
 	
 	angular.module('pdb').factory(serviceID, ['$http',userAPI]);
 	function userAPI($http){

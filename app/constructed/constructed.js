@@ -4,7 +4,7 @@ angular.module('pdb.constructed', [])
 
 .controller('ConstructedCtrl', ['$scope', 'gamesAPI',
 	function($scope, gamesAPI) {
-		/*
+	
 		
 		$scope.constructedEntry = {
 			ownClass: '',
@@ -30,5 +30,5 @@ angular.module('pdb.constructed', [])
 		$scope.submitConstructedMatch = function(entry){
 			gamesAPI.submitConstructedMatch(entry);
 		};
-		*/
+			/**/
 }]);
