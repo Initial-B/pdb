@@ -4,30 +4,19 @@ angular.module('pdb.arena', [])
 
 .controller('ArenaCtrl', ['$scope', 'habitsAPI',
 	function($scope, habitsAPI) {
-
-	/*
-		$scope.habitLog = {
-			userID: '',
-			startDate: '',
-			score: 0.00,
-		};
 		
+		
+		
+		//TODO: startDate field or hardcode [currentDate - 7 days]
 		$scope.getRecentHabitLogs = function(){
-			//TODO: call habitsAPI.getHabitLogs for past 7 days (or so)
-			
-			
-			
-			//gamesAPI.getConstructedMatches(0).then(
-			//	function(response){
-			//		if(response.data['responseCode'] == 'success'){
-			//			$scope.recentMatches = response.data['constructedMatches'];
-			//		}//else display some error message
-			//	}
-			//);
+			console.log('entered $scope.getRecentHabitLogs()');
+			habitsAPI.getHabitLogs('2015-11-02').then(
+				function(response){
+					if(response.data['responseCode'] == 'success'){
+						$scope.recentHabitLogs = response.data['habitLogs'];
+					}//else display some error message
+				}
+			);
 		};
-		
-		$scope.submitHabitLog = function(habitLog){
-			habitsAPI.submitHabitLog(habitLog);
-		};
-		*/
+
 }]);

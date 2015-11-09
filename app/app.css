@@ -29,14 +29,14 @@
   padding: 0;
 }
 
-.hsMatchesTable, .hsMatchesTable th, .hsMatchesTable td{
+.habitLogsTable, .habitLogsTable th, .habitLogsTable td{
   border: 1px solid grey;
   border-collapse: collapse;
   padding: 5px;
 }
-.hsMatchesTable tr:nth-child(odd)	{
+.habitLogsTable tr:nth-child(odd)	{
   background-color: #f1f1f1;
 }
-.hsMatchesTable tr:nth-child(even) {
+.habitLogsTable tr:nth-child(even) {
   background-color: #ffffff;
 }

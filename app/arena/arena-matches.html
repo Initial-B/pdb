@@ -1,1 +1,13 @@
 <p>view: habits</p>
+<button ng-click="getRecentHabitLogs()">Get Recent Habit Logs</button>
+<br/><br/>
+<table class="habitLogsTable">
+  <tr>
+  <th>logDate</th>
+  <th>score</th>
+  </tr>
+  <tr ng-repeat="x in recentHabitLogs">
+    <td>{{x.logDate}}</td>
+    <td>{{x.score}}</td>
+  </tr>
+</table>

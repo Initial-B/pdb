@@ -53,7 +53,7 @@
 			console.log('getting habit logs for userID: ' + userID + " SID: " + sessionID
 				+ ' startDate: ' + startDate);
 			return $http({
-				url: 'http://apsis.me/PDB/lib/Habits/Habits_cc.phpp',
+				url: 'http://apsis.me/PDB/lib/Habits/Habits_cc.php',
 				method: 'POST',
 				data: {
 					action: 'getHabitLogs',
