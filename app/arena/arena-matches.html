@@ -11,3 +11,14 @@
     <td>{{x.score}}</td>
   </tr>
 </table>
+<hr/>
+<p>submit habit log</p>
+<form novalidate class="habitLogEntryForm">
+	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate"/>
+	<br/>
+	score (out of 100.00): <input type="text" ng-model="habitLogEntry.score"/>
+	<br/>
+	<br/>
+	<input type="button" ng-click="reset()" value="Reset" />
+    <input type="submit" ng-click="submitHabitLogEntry(habitLogEntry)" value="Submit" />
+</form>

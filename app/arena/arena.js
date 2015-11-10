@@ -5,7 +5,14 @@ angular.module('pdb.arena', [])
 .controller('ArenaCtrl', ['$scope', 'habitsAPI',
 	function($scope, habitsAPI) {
 		
+		$scope.habitLogEntry = {
+			logDate: '',
+			score: 0.00
+		};
 		
+		$scope.submitHabitLogEntry = function(habitLog){
+			habitsAPI.submitHabitLog(habitLog);
+		};
 		
 		//TODO: startDate field or hardcode [currentDate - 7 days]
 		$scope.getRecentHabitLogs = function(){
