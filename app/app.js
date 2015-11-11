@@ -5,8 +5,8 @@ var pdbApp = angular.module('pdb', [
   'ui.bootstrap',
   'ui.router',
   'pdb.login',
-  'pdb.constructed',
-  'pdb.arena',
+  'pdb.finances',
+  'pdb.habits',
   'pdb.version'
 ]);
 pdbApp.config(['$stateProvider','$urlRouterProvider',
@@ -24,16 +24,16 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 		})
 		.state('finances',{
 			url: '/finances',
-			templateUrl: 'constructed/constructed-matches.html',
-			controller: 'ConstructedCtrl',
+			templateUrl: 'finances/finances-main.html',
+			controller: 'FinancesCtrl',
 			data:{
 				requireLogin: true
 			}
 		})
 		.state('habits',{
 			url: '/habits',
-			templateUrl: 'arena/arena-matches.html',
-			controller: 'ArenaCtrl',
+			templateUrl: 'habits/habits-main.html',
+			controller: 'HabitsCtrl',
 			data:{
 				requireLogin: true
 			}

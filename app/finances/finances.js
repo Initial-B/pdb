@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('pdb.constructed', [])
+angular.module('pdb.finances', [])
 
-.controller('ConstructedCtrl', ['$scope', 'gamesAPI',
+.controller('FinancesCtrl', ['$scope', 'gamesAPI',
 	function($scope, gamesAPI) {
 	
 		

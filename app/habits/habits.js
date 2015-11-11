@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('pdb.arena', [])
+angular.module('pdb.habits', [])
 
-.controller('ArenaCtrl', ['$scope', 'habitsAPI',
+.controller('HabitsCtrl', ['$scope', 'habitsAPI',
 	function($scope, habitsAPI) {
 		
 		$scope.habitLogEntry = {
