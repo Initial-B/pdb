@@ -40,3 +40,8 @@
 .habitLogsTable tr:nth-child(even) {
   background-color: #ffffff;
 }
+.habitsLineChartContainer{
+	width: 600px;
+	height: 350px;
+	float: left;
+}

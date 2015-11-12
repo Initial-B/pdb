@@ -1,5 +1,7 @@
 'use strict';
 
+var PDB = PDB || {};
+
 // Declare app level module which depends on views, and components
 var pdbApp = angular.module('pdb', [
   'ui.bootstrap',
@@ -101,3 +103,13 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 		});
 	}
 ]);
+
+//include in controllers like so: $scope.chartUtils = PDB.chartUtils;
+//TODO: should this go in a separate file? a service?
+PDB.chartUtils = {
+	//takes an array of strings and replaces them with '', except for every Xth label
+	xthLabels: function(labelsArray, x){
+		//TODO: this
+	}
+
+};
