@@ -1,6 +1,5 @@
 'use strict';
 
-//angular.module('pdb.habits', ['chart.js'])
 angular.module('pdb.habits', ['chart.js'])
 .config(['ChartJsProvider', function (ChartJsProvider) {
 	// Configure all charts
@@ -27,17 +26,22 @@ angular.module('pdb.habits', ['chart.js'])
 			habitsAPI.submitHabitLog(habitLog);
 		};
 		
-		//TODO: startDate field or hardcode currentDate minus 7 days
-		$scope.getRecentHabitLogs = function(){
-			console.log('entered $scope.getRecentHabitLogs()');
-			habitsAPI.getHabitLogs('2015-11-02').then(
+		//get habit logs from $daysAgo days ago and display on chart
+		$scope.getRecentHabitLogs = function(daysAgo){
+			if(!daysAgo){
+				daysAgo = 0;
+			}
+			//get formatted relative date using moment.js
+			var startDate = moment().subtract(daysAgo, 'days').format('YYYY-MM-DD');
+			console.log('calling habitsAPI.getHabitLogs() with startDate: ' + startDate);
+			
+			habitsAPI.getHabitLogs(startDate).then(
 				function(response){
 					if(response.data['responseCode'] == 'success'){
 						$scope.recentHabitLogs = response.data['habitLogs'];
 						console.log('recentHabitLogs: ' + JSON.stringify($scope.recentHabitLogs));
 					}//else display some error message
 					
-					//TEST: set recentHabitLogs as chart data on scope
 					var labels = [];
 					var data = [[]];
 					var count = 0;
@@ -49,26 +53,24 @@ angular.module('pdb.habits', ['chart.js'])
 					}
 					$scope.labels = labels;
 					$scope.data = data;
-					$scope.series = ['Habit Logs'];
+					$scope.series = ['Habit Score'];
 				}
 			);
 		};
 		
+	//private functions
 		//TODO: chart labels filter function in PDB.chartUtils
 		
-		//TEST: chart.js test vals
-		  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-		  $scope.data = [[65, 59, 80, 81, 56, 55, 40]];
-		  
-		  $scope.series = ['Series A'];
-		  /*
-		  $scope.data = [
-			[65, 59, 80, 81, 56, 55, 40],
-			[28, 48, 40, 19, 86, 27, 90]
-		  ];
-		  */
-		  $scope.onClick = function (points, evt) {
-			console.log(points, evt);
-		  };
+
+	//init functions
+
+		//initial page setup: show habit scores for past month
+		$scope.getRecentHabitLogs(30);
+
+		/*
+		 $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+		 $scope.data = [[65, 59, 80, 81, 56, 55, 40]];
+		 $scope.series = ['Series A'];
+		 */
 	}
 ]);

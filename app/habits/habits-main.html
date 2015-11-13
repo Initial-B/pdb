@@ -1,16 +1,6 @@
 <p>view: habits</p>
 <button ng-click="getRecentHabitLogs()">Get Recent Habit Logs</button>
-<br/><br/>
-<table class="habitLogsTable">
-  <tr>
-  <th>logDate</th>
-  <th>score</th>
-  </tr>
-  <tr ng-repeat="x in recentHabitLogs">
-    <td>{{x.logDate}}</td>
-    <td>{{x.score}}</td>
-  </tr>
-</table>
+<br/>
 <br/>
 <div class="habitsLineChartContainer">
 <canvas id="line" class="chart chart-line" chart-data="data"
@@ -28,3 +18,14 @@
 	<input type="button" ng-click="reset()" value="Reset" />
     <input type="submit" ng-click="submitHabitLogEntry(habitLogEntry)" value="Submit" />
 </form>
+<br/>
+<table class="habitLogsTable">
+  <tr>
+  <th>logDate</th>
+  <th>score</th>
+  </tr>
+  <tr ng-repeat="x in recentHabitLogs">
+    <td>{{x.logDate}}</td>
+    <td>{{x.score}}</td>
+  </tr>
+</table>
