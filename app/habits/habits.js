@@ -5,7 +5,7 @@ angular.module('pdb.habits', ['chart.js'])
 	// Configure all charts
 	ChartJsProvider.setOptions({
 		//colours: ['#FF5252', '#FF8A80'],
-		//esponsive: false
+		//responsive: false
 	});
 	// Configure all line charts
 	ChartJsProvider.setOptions('Line', {	
@@ -17,9 +17,10 @@ angular.module('pdb.habits', ['chart.js'])
 	function($scope, habitsAPI) {
 		$scope.chartUtils = PDB.chartUtils;
 		
+		$scope.habitTimeframe = 30;
 		$scope.habitLogEntry = {
 			logDate: '',
-			score: 0.00
+			score: null
 		};
 		
 		$scope.submitHabitLogEntry = function(habitLog){
@@ -28,11 +29,14 @@ angular.module('pdb.habits', ['chart.js'])
 		
 		//get habit logs from $daysAgo days ago and display on chart
 		$scope.getRecentHabitLogs = function(daysAgo){
+			var startDate = '0000-00-00';//default startDate ("all time")
 			if(!daysAgo){
-				daysAgo = 0;
+				daysAgo = $scope.habitTimeframe;
 			}
-			//get formatted relative date using moment.js
-			var startDate = moment().subtract(daysAgo, 'days').format('YYYY-MM-DD');
+			if(daysAgo >= 0){
+				//get formatted relative date using moment.js
+				startDate = moment().subtract(daysAgo, 'days').format('YYYY-MM-DD');
+			}
 			console.log('calling habitsAPI.getHabitLogs() with startDate: ' + startDate);
 			
 			habitsAPI.getHabitLogs(startDate).then(
@@ -46,11 +50,15 @@ angular.module('pdb.habits', ['chart.js'])
 					var data = [[]];
 					var count = 0;
 					console.log('reading recentHabitLogs');
+					//var debugMsg = '';
 					for(var key in $scope.recentHabitLogs){
 						labels[count] = $scope.recentHabitLogs[key]['logDate'];
 						data[0][count] = $scope.recentHabitLogs[key]['score'];
+						//debugMsg += '{' + labels[count] + ', ' + data[0][count] + '}, ';
 						count++;
 					}
+					//console.log(debugMsg);
+					
 					$scope.labels = labels;
 					$scope.data = data;
 					$scope.series = ['Habit Score'];
@@ -65,7 +73,7 @@ angular.module('pdb.habits', ['chart.js'])
 	//init functions
 
 		//initial page setup: show habit scores for past month
-		$scope.getRecentHabitLogs(30);
+		$scope.getRecentHabitLogs($scope.habitTimeframe);
 
 		/*
 		 $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];

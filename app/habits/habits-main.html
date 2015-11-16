@@ -1,5 +1,13 @@
 <p>view: habits</p>
-<button ng-click="getRecentHabitLogs()">Get Recent Habit Logs</button>
+<button ng-click="getRecentHabitLogs()">Show Recent Habit Logs</button>
+	<label for="habitTimeframeSelect">range: </label>
+    <select name="habitTimeframeSelect" id="habitTimeframeSelect" ng-model="habitTimeframe">
+      <option value="">---Please select---</option>
+	  <option value="7">past week</option>
+	  <option value="30">past month</option>
+	  <option value="365">past year</option>
+	  <option value="-1">all time</option>
+    </select>
 <br/>
 <br/>
 <div class="habitsLineChartContainer">
