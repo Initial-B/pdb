@@ -28,7 +28,10 @@
   content: "";
   padding: 0;
 }
-
+div.habitLogsTableContainer{
+	height: 275px;
+	overflow: scroll;
+}
 .habitLogsTable, .habitLogsTable th, .habitLogsTable td{
   border: 1px solid grey;
   border-collapse: collapse;
@@ -44,4 +47,7 @@
 	width: 600px;
 	height: 350px;
 	float: left;
+}
+.habitLogEntryForm .scoreInput{
+	width: 5em;
 }

@@ -15,7 +15,7 @@
 			*/
 			var userID = userAPI.getUserID();
 			var sessionID = userAPI.getSessionID();
-			console.log('submitting habit log with userID: ' + userID + ' sessionID: ' + sessionID  + ' score: ' + habitLog.result);
+			console.log('submitting habit log with userID: ' + userID + ' sessionID: ' + sessionID  + ' score: ' + habitLog.score);
 			return $http({
 				url: 'http://apsis.me/PDB/lib/Habits/Habits_cc.php',
 				method: 'POST',

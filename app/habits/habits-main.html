@@ -18,22 +18,27 @@
 </div>
 <p>submit habit log</p>
 <form novalidate class="habitLogEntryForm">
-	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate"/>
+	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate" />
 	<br/>
-	score (out of 100.00): <input type="text" ng-model="habitLogEntry.score"/>
+	score (out of 100.00): <input type="text" class="scoreInput" ng-model="habitLogEntry.score" ng-model-options="{debounce: 750}"/>
+	-or- <input type="text" class="scoreInput" ng-model="habitLogEntry.scoreLower" ng-model-options="{debounce: 750}"/>
+	/ <input type="text" class="scoreInput" ng-model="habitLogEntry.scoreUppder" ng-model-options="{debounce: 750}"/>
+	
 	<br/>
 	<br/>
 	<input type="button" ng-click="reset()" value="Reset" />
     <input type="submit" ng-click="submitHabitLogEntry(habitLogEntry)" value="Submit" />
 </form>
 <br/>
-<table class="habitLogsTable">
-  <tr>
-  <th>logDate</th>
-  <th>score</th>
-  </tr>
-  <tr ng-repeat="x in recentHabitLogs">
-    <td>{{x.logDate}}</td>
-    <td>{{x.score}}</td>
-  </tr>
-</table>
+<div class="habitLogsTableContainer">
+	<table class="habitLogsTable">
+	  <tr>
+	  <th>logDate</th>
+	  <th>score</th>
+	  </tr>
+	  <tr ng-repeat="x in recentHabitLogs">
+		<td>{{x.logDate}}</td>
+		<td>{{x.score}}</td>
+	  </tr>
+	</table>
+</div>

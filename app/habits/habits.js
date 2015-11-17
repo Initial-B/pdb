@@ -20,11 +20,21 @@ angular.module('pdb.habits', ['chart.js'])
 		$scope.habitTimeframe = 30;
 		$scope.habitLogEntry = {
 			logDate: '',
-			score: null
+			score: null,
+			scoreLower: null,
+			scoreUpper: null
 		};
 		
 		$scope.submitHabitLogEntry = function(habitLog){
-			habitsAPI.submitHabitLog(habitLog);
+			//determine score
+
+			habitsAPI.submitHabitLog(habitLog).then(
+				function(response){
+					if(response.data['responseCode'] == 'success'){
+						$scope.getRecentHabitLogs($scope.habitTimeframe);
+					}
+				}
+			);
 		};
 		
 		//get habit logs from $daysAgo days ago and display on chart
