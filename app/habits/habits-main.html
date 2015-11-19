@@ -18,16 +18,28 @@
 </div>
 <p>submit habit log</p>
 <form novalidate class="habitLogEntryForm">
-	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate" />
+	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntryForm.logDate" />
 	<br/>
-	score (out of 100.00): <input type="text" class="scoreInput" ng-model="habitLogEntry.score" ng-model-options="{debounce: 750}"/>
-	-or- <input type="text" class="scoreInput" ng-model="habitLogEntry.scoreLower" ng-model-options="{debounce: 750}"/>
-	/ <input type="text" class="scoreInput" ng-model="habitLogEntry.scoreUppder" ng-model-options="{debounce: 750}"/>
-	
+	score (out of 100.00): 
+	<input type="text" 
+	class="scorePercentileInput" 
+	ng-model="habitLogEntryForm.scorePercentile" 
+	ng-model-options="{debounce: 500}" 
+	ng-disabled="habitLogEntryForm.scorePercentileDisabled"/>
+	-or- 
+	<input type="text" class="scoreInput"
+	ng-model="habitLogEntryForm.scoreLower"
+	ng-model-options="{debounce: 500}"
+	ng-disabled="habitLogEntryForm.scoreLowerDisabled"/>
+	/ 
+	<input type="text" class="scoreInput" 
+	ng-model="habitLogEntryForm.scoreUpper"
+	ng-model-options="{debounce: 500}"
+	ng-disabled="habitLogEntryForm.scoreUpperDisabled"/>
 	<br/>
 	<br/>
 	<input type="button" ng-click="reset()" value="Reset" />
-    <input type="submit" ng-click="submitHabitLogEntry(habitLogEntry)" value="Submit" />
+    <input type="submit" ng-click="submitHabitLogEntry(habitLogEntryForm)" value="Submit" />
 </form>
 <br/>
 <div class="habitLogsTableContainer">

@@ -13,22 +13,102 @@ angular.module('pdb.habits', ['chart.js'])
 		datasetFill: false //whether to fill the dataset with a color
 	});
 }])
+
+/*
+.directive('scoreInputOption', function(){
+	return{
+		require: ['^form', 'ngModel'],
+		restrict: 'A',
+		link: function (scope, element, attrs, controllers) {
+			var form = controllers[0];
+			var ngModel = controllers[1];
+			var scoreInputChangeListener = function(event){
+				console.log('change on ' + attrs.scoreInputOption);
+				if(form){
+					if(attrs.scoreInputOption == 'score'){
+						console.log('changing value of score to ' + ngModel.$viewValue);
+						console.log('input model: ' + JSON.stringify(ngModel));
+					}
+				}
+			};
+			element.bind('change', scoreInputChangeListener)
+		}
+	};
+})
+*/
 .controller('HabitsCtrl', ['$scope', 'habitsAPI',
 	function($scope, habitsAPI) {
 		$scope.chartUtils = PDB.chartUtils;
 		
 		$scope.habitTimeframe = 30;
-		$scope.habitLogEntry = {
+		$scope.habitLogEntryForm = {
 			logDate: '',
-			score: null,
+			scorePercentile: null,
+			scorePercentileDisabled: false,
 			scoreLower: null,
-			scoreUpper: null
+			scoreLowerDisabled: false,
+			scoreUpper: null,
+			scoreUpperDisabled: false,
+			logDateValidation: {
+				error: false,
+				message: ''
+			},
+			scoreValidation: {
+				error: false,
+				message: ''
+			}
 		};
 		
-		$scope.submitHabitLogEntry = function(habitLog){
-			//determine score
-
-			habitsAPI.submitHabitLog(habitLog).then(
+		/*
+		- if a percentile score is entered, the X-out-of-Y fields will be disabled
+		- if either X or Y is entered, then the percentile field will be disabled
+		- if percentile is blank (empty or whitespace only), then X and Y will be enabled
+		- if both X and Y are blank, then percentile will be enabled
+		
+		TODO: update scoreValidationMessage 
+		*/
+		$scope.$watch('habitLogEntryForm.scorePercentile',
+			function handleScoreChange(newValue, oldValue ) {
+				if(newValue != null){
+					if(newValue.trim() != ''){
+						$scope.habitLogEntryForm.scoreLowerDisabled = true;
+						$scope.habitLogEntryForm.scoreUpperDisabled = true;
+					}else{
+						$scope.habitLogEntryForm.scoreLowerDisabled = false;
+						$scope.habitLogEntryForm.scoreUpperDisabled = false;
+					}
+				}
+			}
+		);
+		$scope.$watch('habitLogEntryForm.scoreLower',
+			function handleScoreLowerChange(newValue, oldValue ) {
+				if(newValue != null){
+					if(newValue.trim() != ''){
+						$scope.habitLogEntryForm.scorePercentileDisabled = true;
+					}else if($scope.habitLogEntryForm.scoreUpper.trim() == ''){
+						$scope.habitLogEntryForm.scorePercentileDisabled = false;
+					}
+				}
+			}
+		);
+		$scope.$watch('habitLogEntryForm.scoreUpper',
+			function handleScoreUpperChange(newValue, oldValue ) {
+				if(newValue != null){
+					if(newValue.trim() != ''){
+						$scope.habitLogEntryForm.scorePercentileDisabled = true;
+					}else if($scope.habitLogEntryForm.scoreLower.trim() == ''){
+						$scope.habitLogEntryForm.scorePercentileDisabled = false;
+					}
+				}
+			}
+		);
+		
+		$scope.submithabitLogEntryForm = function(habitLogEntryForm){
+			//determine which score input to use
+			
+			//create habitLog 
+			
+			habitsAPI.submitHabitLog(habitLogEntryForm).then(
 				function(response){
 					if(response.data['responseCode'] == 'success'){
 						$scope.getRecentHabitLogs($scope.habitTimeframe);
@@ -53,13 +133,13 @@ angular.module('pdb.habits', ['chart.js'])
 				function(response){
 					if(response.data['responseCode'] == 'success'){
 						$scope.recentHabitLogs = response.data['habitLogs'];
-						console.log('recentHabitLogs: ' + JSON.stringify($scope.recentHabitLogs));
+						//console.log('recentHabitLogs: ' + JSON.stringify($scope.recentHabitLogs));
 					}//else display some error message
 					
 					var labels = [];
 					var data = [[]];
 					var count = 0;
-					console.log('reading recentHabitLogs');
+					//console.log('reading recentHabitLogs');
 					//var debugMsg = '';
 					for(var key in $scope.recentHabitLogs){
 						labels[count] = $scope.recentHabitLogs[key]['logDate'];
