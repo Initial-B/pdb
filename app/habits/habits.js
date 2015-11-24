@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pdb.habits', ['chart.js'])
+angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 .config(['ChartJsProvider', function (ChartJsProvider) {
 	// Configure all charts
 	ChartJsProvider.setOptions({
@@ -13,7 +13,22 @@ angular.module('pdb.habits', ['chart.js'])
 		datasetFill: false //whether to fill the dataset with a color
 	});
 }])
-
+/*
+	validation directives
+*/
+//percentile must be between 0.00 and 100.00
+.directive("percentile", function() {
+	return {
+		restrict: "A",
+		require: "?ngModel",
+		link: function(scope, element, attributes, ngModel) {
+			ngModel.$validators.percentile = function(scorePercentile) {
+				//console.log('validating percentile score: ' + scorePercentile);
+				return (scorePercentile >= 0 && scorePercentile <= 100);
+			}
+		}
+	};
+})	
 /*
 .directive('scoreInputOption', function(){
 	return{
@@ -101,14 +116,24 @@ angular.module('pdb.habits', ['chart.js'])
 					}
 				}
 			}
-		);
-		
-		$scope.submithabitLogEntryForm = function(habitLogEntryForm){
-			//determine which score input to use
+		);	
+		$scope.submitHabitLogEntryForm = function(habitLogEntryForm){
+			//TODO: validate form inputs
+			
+			var calculatedScore;
+			if(habitLogEntryForm.scorePercentile != null
+			&& habitLogEntryForm.scorePercentile != '')
+				calculatedScore = habitLogEntryForm.scorePercentile;
+			else
+				calculatedScore = 100 * (habitLogEntryForm.scoreLower / habitLogEntryForm.scoreUpper);
 			
 			//create habitLog 
+			var habitLogEntry = {
+				logDate: habitLogEntryForm.logDate,
+				score: calculatedScore
+			}
 			
-			habitsAPI.submitHabitLog(habitLogEntryForm).then(
+			habitsAPI.submitHabitLog(habitLogEntry).then(
 				function(response){
 					if(response.data['responseCode'] == 'success'){
 						$scope.getRecentHabitLogs($scope.habitTimeframe);
