@@ -20,11 +20,18 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 .directive("percentile", function() {
 	return {
 		restrict: "A",
-		require: "?ngModel",
+		require: "ngModel",
 		link: function(scope, element, attributes, ngModel) {
 			ngModel.$validators.percentile = function(scorePercentile) {
-				//console.log('validating percentile score: ' + scorePercentile);
-				return (scorePercentile >= 0 && scorePercentile <= 100);
+				if(!element.prop("disabled")){
+					console.log('validating percentile score: ' + scorePercentile
+						+ '  result: ' + (scorePercentile >= 0 && scorePercentile <= 100));
+					return (scorePercentile >= 0 && scorePercentile <= 100);
+				}else{
+					console.log('scorePercentile element is disabled, no need to validate');
+					return true;
+				}
+				
 			}
 		}
 	};
@@ -64,14 +71,6 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			scoreLowerDisabled: false,
 			scoreUpper: null,
 			scoreUpperDisabled: false,
-			logDateValidation: {
-				error: false,
-				message: ''
-			},
-			scoreValidation: {
-				error: false,
-				message: ''
-			}
 		};
 		
 		/*
@@ -100,7 +99,8 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				if(newValue != null){
 					if(newValue.trim() != ''){
 						$scope.habitLogEntryForm.scorePercentileDisabled = true;
-					}else if($scope.habitLogEntryForm.scoreUpper.trim() == ''){
+					}else if($scope.habitLogEntryForm.scoreUpper == null
+						  || $scope.habitLogEntryForm.scoreUpper.trim() == ''){
 						$scope.habitLogEntryForm.scorePercentileDisabled = false;
 					}
 				}
@@ -111,7 +111,8 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				if(newValue != null){
 					if(newValue.trim() != ''){
 						$scope.habitLogEntryForm.scorePercentileDisabled = true;
-					}else if($scope.habitLogEntryForm.scoreLower.trim() == ''){
+					}else if($scope.habitLogEntryForm.scoreLower == null
+						  || $scope.habitLogEntryForm.scoreLower.trim() == ''){
 						$scope.habitLogEntryForm.scorePercentileDisabled = false;
 					}
 				}
