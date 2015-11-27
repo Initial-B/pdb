@@ -17,36 +17,73 @@
 </canvas>
 </div>
 <p>submit habit log</p>
+<form class="habitLogEntryForm" ng-controller="HabitsCtrl">
+	date (YYYY-MM-DD): <input type="text" ng-model="logDate" />
+	<br/>
+	Score:
+	<div class="habitScoreInputSelectors">
+		<label>
+			<input type="radio"
+			   ng-model="scoreInputType"
+			   value="points">
+			   points
+		</label><br/>
+		<label>
+			<input type="radio"
+			   ng-model="scoreInputType"
+			   value="percent">
+			   percent
+		</label><br/>
+	</div>
+	<input type="text" class="scoreInput" 
+		ng-model="score" 
+		score
+	/>
+	<span ng-if='scoreInputType == "points"'>
+		out of
+	</span>
+	<span ng-if="scoreInputType == 'percent'">%</span>
+	<input type="text" class="scoreInput" 
+		ng-model="maxScore" 
+		ng-if="scoreInputType == 'points'"
+	/>
+</form>
+<br/><br/>
+	
+<!--
 <form class="habitLogEntryForm" name="habitLogEntryForm">
 	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntryForm.logDate" />
 	<br/>
 	score (out of 100.00): 
 	<input type="text" 
 	class="scoreInput" 
-	ng-model="habitLogEntryForm.scorePercentile" 
-	ng-disabled="habitLogEntryForm.scorePercentileDisabled"
-	percentile
+	ng-model="habitLogEntryForm.scorePercent" 
+	ng-disabled="habitLogEntryForm.scorePercentDisabled"
+	scorePercent
 	/>
 	-or- 
 	<input type="text" class="scoreInput"
-	ng-model="habitLogEntryForm.scoreLower"
-	ng-disabled="habitLogEntryForm.scoreLowerDisabled"
-	lowerbound
+	ng-model="habitLogEntryForm.scorePoints"
+	ng-disabled="habitLogEntryForm.scorePointsDisabled"
+	scorePoints
 	/>
 	/ 
 	<input type="text" class="scoreInput" 
-	ng-model="habitLogEntryForm.scoreUpper"
-	ng-disabled="habitLogEntryForm.scoreUpperDisabled"/>
+	ng-model="habitLogEntryForm.maxPoints"
+	ng-disabled="habitLogEntryForm.maxPointsDisabled"
+	maxPoints
+	/>
 	<div ng-messages="habitLogEntryForm.$error" class="errors">
-		<span ng-message="percentile"> percentile scores must be between 0.00 and 100.00 (inclusive)
+		<span ng-message="scorePercent"> percentage scores must be between 0.00 and 100.00 (inclusive)
 		<span/>
-		<span ng-message="lowerbound">score must be less than upper bound</span>
+		<span ng-message="scorePoints">points scored must be less than maximum points</span>
 	</div>
 	<br/>
 	<br/>
 	<input type="button" ng-click="reset()" value="Reset" />
     <input type="submit" ng-click="submitHabitLogEntryForm(habitLogEntryForm)" value="Submit" />
 </form>
+-->
 <br/>
 <div class="habitLogsTableContainer">
 	<table class="habitLogsTable">

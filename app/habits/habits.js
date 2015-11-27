@@ -15,28 +15,31 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 }])
 /*
 	validation directives
+	TODO: combine input disabler code into these directives
 */
-//percentile must be between 0.00 and 100.00
-.directive("percentile", function() {
+//validate score based on scoreInputType
+.directive("score", function() {
 	return {
 		restrict: "A",
 		require: "ngModel",
 		link: function(scope, element, attributes, ngModel) {
-			ngModel.$validators.percentile = function(scorePercentile) {
-				if(!element.prop("disabled")){
-					console.log('validating percentile score: ' + scorePercentile
-						+ '  result: ' + (scorePercentile >= 0 && scorePercentile <= 100));
-					return (scorePercentile >= 0 && scorePercentile <= 100);
+			ngModel.$validators.scorePercent = function(scorePercent) {
+				if(!element.prop("disabled")
+				&& scorePercent != null){
+					console.log('validating percentage score: ' + scorePercent
+						+ '  result: ' + (scorePercent >= 0 && scorePercent <= 100));
+					return (scorePercent >= 0 && scorePercent <= 100);
 				}else{
-					console.log('scorePercentile element is disabled, no need to validate');
+					console.log('scorePercent element is null, no need to validate');
 					return true;
 				}
 				
 			}
 		}
 	};
-})	
+})
 /*
+//example of directive  that accesses multiple form inputs
 .directive('scoreInputOption', function(){
 	return{
 		require: ['^form', 'ngModel'],
@@ -63,74 +66,32 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		$scope.chartUtils = PDB.chartUtils;
 		
 		$scope.habitTimeframe = 30;
-		$scope.habitLogEntryForm = {
-			logDate: '',
-			scorePercentile: null,
-			scorePercentileDisabled: false,
-			scoreLower: null,
-			scoreLowerDisabled: false,
-			scoreUpper: null,
-			scoreUpperDisabled: false,
-		};
+		$scope.scoreInputType = 'points';
+		$scope.score = '';
+		$scope.maxScore = '';
 		
 		/*
-		- if a percentile score is entered, the X-out-of-Y fields will be disabled
-		- if either X or Y is entered, then the percentile field will be disabled
-		- if percentile is blank (empty or whitespace only), then X and Y will be enabled
-		- if both X and Y are blank, then percentile will be enabled
-		
-		TODO: update scoreValidationMessage 
+		$scope.habitLogEntryForm = {
+			logDate: '',
+			scoreInputType: null,
+			score: null,
+			maxScore: 100,
+		};
 		*/
-		$scope.$watch('habitLogEntryForm.scorePercentile',
-			function handleScoreChange(newValue, oldValue ) {
-				if(newValue != null){
-					if(newValue.trim() != ''){
-						$scope.habitLogEntryForm.scoreLowerDisabled = true;
-						$scope.habitLogEntryForm.scoreUpperDisabled = true;
-					}else{
-						$scope.habitLogEntryForm.scoreLowerDisabled = false;
-						$scope.habitLogEntryForm.scoreUpperDisabled = false;
-					}
-				}
-			}
-		);
-		$scope.$watch('habitLogEntryForm.scoreLower',
-			function handleScoreLowerChange(newValue, oldValue ) {
-				if(newValue != null){
-					if(newValue.trim() != ''){
-						$scope.habitLogEntryForm.scorePercentileDisabled = true;
-					}else if($scope.habitLogEntryForm.scoreUpper == null
-						  || $scope.habitLogEntryForm.scoreUpper.trim() == ''){
-						$scope.habitLogEntryForm.scorePercentileDisabled = false;
-					}
-				}
-			}
-		);
-		$scope.$watch('habitLogEntryForm.scoreUpper',
-			function handleScoreUpperChange(newValue, oldValue ) {
-				if(newValue != null){
-					if(newValue.trim() != ''){
-						$scope.habitLogEntryForm.scorePercentileDisabled = true;
-					}else if($scope.habitLogEntryForm.scoreLower == null
-						  || $scope.habitLogEntryForm.scoreLower.trim() == ''){
-						$scope.habitLogEntryForm.scorePercentileDisabled = false;
-					}
-				}
-			}
-		);	
-		$scope.submitHabitLogEntryForm = function(habitLogEntryForm){
+
+		$scope.submitHabitLogEntryForm = function(){
 			//TODO: validate form inputs
 			
 			var calculatedScore;
-			if(habitLogEntryForm.scorePercentile != null
-			&& habitLogEntryForm.scorePercentile != '')
-				calculatedScore = habitLogEntryForm.scorePercentile;
-			else
-				calculatedScore = 100 * (habitLogEntryForm.scoreLower / habitLogEntryForm.scoreUpper);
+			if($scope.scoreInputType == 'percent'){
+				$scope.maxScore = 100;
+			}
+			
+			calculatedScore = $scope.score / $scope.maxScore;
 			
 			//create habitLog 
 			var habitLogEntry = {
-				logDate: habitLogEntryForm.logDate,
+				logDate: $scope.logDate,
 				score: calculatedScore
 			}
 			

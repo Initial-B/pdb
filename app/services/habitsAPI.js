@@ -63,7 +63,7 @@
 				}
 			}).then(
 				function(response){
-					console.log('server response: ' + JSON.stringify(response.data));
+					//console.log('server response: ' + JSON.stringify(response.data));
 					if(response.data['newSessionID']){
 						userAPI.setSessionID(response.data['newSessionID']);
 						if(response.data['responseCode'] == 'success'){
