@@ -18,14 +18,18 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 	TODO: combine input disabler code into these directives
 */
 //validate score based on scoreInputType
+/*
 .directive("score", function() {
 	return {
 		restrict: "A",
-		require: "ngModel",
-		link: function(scope, element, attributes, ngModel) {
+		require: ['^form', 'ngModel'],
+		link: function(scope, element, attributes, controllers) {
+		var form = controllers[0];
+		var ngModel = controllers[1];
 			ngModel.$validators.scorePercent = function(scorePercent) {
 				if(!element.prop("disabled")
 				&& scorePercent != null){
+				//console.log('validating score on form: ' + JSON.stringify(form.));
 					console.log('validating percentage score: ' + scorePercent
 						+ '  result: ' + (scorePercent >= 0 && scorePercent <= 100));
 					return (scorePercent >= 0 && scorePercent <= 100);
@@ -38,6 +42,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		}
 	};
 })
+*/
 /*
 //example of directive  that accesses multiple form inputs
 .directive('scoreInputOption', function(){
@@ -65,36 +70,40 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 	function($scope, habitsAPI) {
 		$scope.chartUtils = PDB.chartUtils;
 		
-		$scope.habitTimeframe = 30;
-		$scope.scoreInputType = 'points';
-		$scope.score = '';
-		$scope.maxScore = '';
-		
-		/*
 		$scope.habitLogEntryForm = {
 			logDate: '',
-			scoreInputType: null,
-			score: null,
-			maxScore: 100,
+			scoreInputType: 'points',
+			score: '',
+			maxScore: ''
 		};
-		*/
+		
+		$scope.habitTimeframe = 30;
 
+		
+		
+		//submit habit log form using HabitsAPI
 		$scope.submitHabitLogEntryForm = function(){
 			//TODO: validate form inputs
 			
 			var calculatedScore;
-			if($scope.scoreInputType == 'percent'){
-				$scope.maxScore = 100;
+			if($scope.habitLogEntryForm.scoreInputType == 'percent'){
+				$scope.habitLogEntryForm.maxScore = 100;
 			}
 			
-			calculatedScore = $scope.score / $scope.maxScore;
+			calculatedScore = 100 * $scope.habitLogEntryForm.score / $scope.habitLogEntryForm.maxScore;
 			
-			//create habitLog 
+			//$scope.$apply();
+			console.log('creating habitLogEntry from form fields score: '
+				+ $scope.habitLogEntryForm.score + ' scoreInputType: ' + $scope.habitLogEntryForm.scoreInputType
+				+ ' maxScore: ' + $scope.habitLogEntryForm.maxScore);
+			
+			//create habitLogentry
 			var habitLogEntry = {
-				logDate: $scope.logDate,
+				logDate: $scope.habitLogEntryForm.logDate,
 				score: calculatedScore
 			}
-			
+			console.log('submitting habit log entry with logDate: ' + habitLogEntry.logDate
+			+ ' score: ' + habitLogEntry.score);
 			habitsAPI.submitHabitLog(habitLogEntry).then(
 				function(response){
 					if(response.data['responseCode'] == 'success'){
@@ -120,7 +129,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				function(response){
 					if(response.data['responseCode'] == 'success'){
 						$scope.recentHabitLogs = response.data['habitLogs'];
-						//console.log('recentHabitLogs: ' + JSON.stringify($scope.recentHabitLogs));
+						console.log('recentHabitLogs: ' + JSON.stringify($scope.recentHabitLogs));
 					}//else display some error message
 					
 					var labels = [];

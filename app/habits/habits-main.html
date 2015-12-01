@@ -18,35 +18,35 @@
 </div>
 <p>submit habit log</p>
 <form class="habitLogEntryForm" ng-controller="HabitsCtrl">
-	date (YYYY-MM-DD): <input type="text" ng-model="logDate" />
+	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntryForm.logDate" />
 	<br/>
 	Score:
 	<div class="habitScoreInputSelectors">
 		<label>
 			<input type="radio"
-			   ng-model="scoreInputType"
+			   ng-model="habitLogEntryForm.scoreInputType"
 			   value="points">
 			   points
 		</label><br/>
 		<label>
 			<input type="radio"
-			   ng-model="scoreInputType"
+			   ng-model="habitLogEntryForm.scoreInputType"
 			   value="percent">
 			   percent
 		</label><br/>
 	</div>
 	<input type="text" class="scoreInput" 
-		ng-model="score" 
-		score
+		ng-model="habitLogEntryForm.score" 
 	/>
-	<span ng-if='scoreInputType == "points"'>
+	<span ng-if='habitLogEntryForm.scoreInputType == "points"'>
 		out of
 	</span>
 	<span ng-if="scoreInputType == 'percent'">%</span>
 	<input type="text" class="scoreInput" 
-		ng-model="maxScore" 
-		ng-if="scoreInputType == 'points'"
+		ng-model="habitLogEntryForm.maxScore" 
+		ng-if="habitLogEntryForm.scoreInputType == 'points'"
 	/>
+	<input type="submit" ng-click="submitHabitLogEntryForm()" value="Submit" />
 </form>
 <br/><br/>
 	
