@@ -167,4 +167,18 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		 $scope.series = ['Series A'];
 		 */
 	}
-]);
+])
+.directive("score", function() {
+    return {
+        restrict: "A",  
+        require: 'ngModel',
+        link: function(scope, element, attributes, ngModel) {
+            ngModel.$validators.score = function(modelValue) {  
+				console.log('validating score field with modelValue: ' + modelValue
+				+ ' and scoreInputType: ' + scope.habitLogEntryForm.scoreInputType);
+				
+				return true;
+            }
+        }
+    };
+});
