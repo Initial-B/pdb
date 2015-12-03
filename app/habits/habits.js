@@ -79,8 +79,6 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		
 		$scope.habitTimeframe = 30;
 
-		
-		
 		//submit habit log form using HabitsAPI
 		$scope.submitHabitLogEntryForm = function(){
 			//TODO: validate form inputs
@@ -168,17 +166,59 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		 */
 	}
 ])
-.directive("score", function() {
+.directive("scoreInput", function() {
     return {
         restrict: "A",  
         require: 'ngModel',
         link: function(scope, element, attributes, ngModel) {
-            ngModel.$validators.score = function(modelValue) {  
-				console.log('validating score field with modelValue: ' + modelValue
-				+ ' and scoreInputType: ' + scope.habitLogEntryForm.scoreInputType);
+			console.log('validating score field with modelValue: ' + modelValue
+			+ ' and scoreInputType: ' + scope.habitLogEntryForm.scoreInputType);
+			//number format validator
+			//TODO: use common function
+			ngModel.$validators.scoreFormat = function(modelValue){
 				
+				
+				
+				return true;
+			}
+			
+			//point score validator
+			ngModel.$validators.pointScore = function(modelValue) {
+				if(scope.habitLogEntryForm.scoreInputType === 'points'){
+					
+					if(PDB.utils.isInt(scope.habitLogEntryForm.maxScore)
+					&& modelValue > scope.habitLogEntryForm.maxScore){
+						return false;
+					}
+				}
+				return true;
+			};
+			//percent score validator
+            ngModel.$validators.percentScore = function(modelValue) {
+				if(scope.habitLogEntryForm.scoreInputType === 'percent'){
+					if(PDB.utils.isInt(scope.habitLogEntryForm.maxScore)
+					&& modelValue > scope.habitLogEntryForm.maxScore){
+					
+					}
+				}
 				return true;
             }
         }
+    };
+})
+.directive("maxScoreInput", function() {
+    return {
+        restrict: "A",  
+        require: 'ngModel',
+        link: function(scope, element, attributes, ngModel) {
+			console.log('validating maxScore field with modelValue: ' + modelValue);
+			//number format validator
+			//TODO: use common function
+			ngModel.$validators.scoreFormat = function(modelValue){
+				
+				
+				
+				return true;
+			}
     };
 });

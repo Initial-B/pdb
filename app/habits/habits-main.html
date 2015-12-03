@@ -37,7 +37,7 @@
 	</div>
 	<input type="text" class="scoreInput" 
 		ng-model="habitLogEntryForm.score" 
-		score
+		scoreInput
 	/>
 	<span ng-if='habitLogEntryForm.scoreInputType == "points"'>
 		out of
@@ -46,8 +46,19 @@
 	<input type="text" class="scoreInput" 
 		ng-model="habitLogEntryForm.maxScore" 
 		ng-if="habitLogEntryForm.scoreInputType == 'points'"
+		maxScoreInput	
 	/>
 	<input type="submit" ng-click="submitHabitLogEntryForm()" value="Submit" />
+	<br/>
+	<div ng-messages="habitLogEntryForm.score.$error" class="errors">
+		<span ng-message="percentScore"> percentage scores must be between 0.00 and 100.00 (inclusive)
+		<span/>
+		<span ng-message="pointScore">points scored must be less than maximum points</span>
+		<span ng-message="scoreFormat">score must be a number</span>
+	</div>
+	<div ng-messages="habitLogEntryForm.maxScore.$error" class="errors">
+		<span ng-message="scoreFormat">max score must be a number</span>
+	</div>
 </form>
 <br/><br/>
 	
