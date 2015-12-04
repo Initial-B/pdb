@@ -68,6 +68,8 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 */
 .controller('HabitsCtrl', ['$scope', 'habitsAPI',
 	function($scope, habitsAPI) {
+	
+		var model = this;
 		$scope.chartUtils = PDB.chartUtils;
 		
 		$scope.habitLogEntryForm = {
@@ -75,6 +77,18 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			scoreInputType: 'points',
 			score: '',
 			maxScore: ''
+		};
+		
+
+		//DEBUG: test button function
+		$scope.test = function(){
+			console.log(
+//			'HabitsCtrl.testForm.testInput: ' + HabitsCtrl.testForm.testInput +
+			' $scope.testForm.testInput: ' + $scope.testInput +
+			' model.testForm.testInput: ' + model.testInput);
+			console.log('$scope: ' + PDB.utils.stringifySafe($scope));
+			//console.log('score: ' + $scope.habitLogEntryForm.score
+			//+ ' scoreInputType: ' + $scope.habitLogEntryForm.scoreInputType);
 		};
 		
 		$scope.habitTimeframe = 30;
@@ -150,8 +164,21 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			);
 		};
 		
+		//returns true if value is a positive float or is not set
+		$scope.checkScoreFormat = function(value){
+			if(value === undefined
+			|| value === null
+			|| value === ''){
+				return true;
+			}else if(PDB.utils.isFloat(value)
+			&& parseFloat(value) >=0){
+				return true;
+			}
+			return false;
+		};
+		
 	//private functions
-		//TODO: chart labels filter function in PDB.chartUtils
+
 		
 
 	//init functions
@@ -173,36 +200,40 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
         link: function(scope, element, attributes, ngModel) {
 			console.log('validating score field with modelValue: ' + modelValue
 			+ ' and scoreInputType: ' + scope.habitLogEntryForm.scoreInputType);
+			
+			var maxScore = scope.habitLogEntryForm.maxScore;
+			
 			//number format validator
-			//TODO: use common function
 			ngModel.$validators.scoreFormat = function(modelValue){
-				
-				
-				
+				if(!scope.checkScoreFormat(modelValue)){
+					return false;
+				}
 				return true;
-			}
+			};
 			
 			//point score validator
+			// - returns false if score is greater than maxScore
 			ngModel.$validators.pointScore = function(modelValue) {
 				if(scope.habitLogEntryForm.scoreInputType === 'points'){
-					
-					if(PDB.utils.isInt(scope.habitLogEntryForm.maxScore)
-					&& modelValue > scope.habitLogEntryForm.maxScore){
+					if(scope.checkScoreFormat(maxScore)
+					&& scope.checkScoreFormat(modelValue)
+					&& parseFloat(modelValue) > parseFloat(maxScore)){
 						return false;
 					}
 				}
 				return true;
 			};
 			//percent score validator
+			// - returns false if score is greater than 100
             ngModel.$validators.percentScore = function(modelValue) {
 				if(scope.habitLogEntryForm.scoreInputType === 'percent'){
-					if(PDB.utils.isInt(scope.habitLogEntryForm.maxScore)
-					&& modelValue > scope.habitLogEntryForm.maxScore){
-					
+					if(scope.checkScoreFormat(modelValue)
+					&& modelValue > 100){
+						return false;
 					}
 				}
 				return true;
-            }
+            };
         }
     };
 })
@@ -213,12 +244,34 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
         link: function(scope, element, attributes, ngModel) {
 			console.log('validating maxScore field with modelValue: ' + modelValue);
 			//number format validator
-			//TODO: use common function
 			ngModel.$validators.scoreFormat = function(modelValue){
-				
-				
-				
+				if(!scope.checkScoreFormat(modelValue)){
+					return false;
+				}
 				return true;
-			}
+			};
+		}
+    };
+})
+.directive("validateNoSpace", function() {
+    return {
+        restrict: "A",  
+        require: 'ngModel',
+        link: function(scope, element, attributes, ngModel) {
+			//console.log('creating validators for ngModel: ' + PDB.utils.stringifySafe(ngModel));
+			
+			//modelValue is invalid if it has whitespace
+			ngModel.$validators.nospace = function(modelValue){
+				//console.log('validating testInput: ' + modelValue + ' in ngModel: '
+				// + PDB.utils.stringifySafe(ngModel));
+				if(modelValue
+				&& modelValue != modelValue.replace(/ /g,'')){
+					console.log('testInput: ' + modelValue + ' is invalid');
+					return false;
+				}
+				console.log('testInput: ' + modelValue + ' is valid');
+				return true;
+			};
+		}
     };
 });

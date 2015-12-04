@@ -9,6 +9,8 @@
 	  <option value="-1">all time</option>
     </select>
 <br/>
+<button ng-click="test()">test</button>
+<br/>
 <br/>
 <div class="habitsLineChartContainer">
 <canvas id="line" class="chart chart-line" chart-data="data"
@@ -17,7 +19,7 @@
 </canvas>
 </div>
 <p>submit habit log</p>
-<form class="habitLogEntryForm" ng-controller="HabitsCtrl">
+<form class="habitLogEntryForm" >
 	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntryForm.logDate" />
 	<br/>
 	Score:
@@ -25,24 +27,20 @@
 		<label>
 			<input type="radio"
 			   ng-model="habitLogEntryForm.scoreInputType"
-			   value="points">
-			   points
+			   value="points"> points
 		</label><br/>
 		<label>
 			<input type="radio"
 			   ng-model="habitLogEntryForm.scoreInputType"
-			   value="percent">
-			   percent
+			   value="percent"> percent
 		</label><br/>
 	</div>
 	<input type="text" class="scoreInput" 
 		ng-model="habitLogEntryForm.score" 
 		scoreInput
 	/>
-	<span ng-if='habitLogEntryForm.scoreInputType == "points"'>
-		out of
-	</span>
-	<span ng-if="scoreInputType == 'percent'">%</span>
+	<span ng-if="habitLogEntryForm.scoreInputType == 'percent'">%</span>
+	<span ng-if='habitLogEntryForm.scoreInputType == "points"'> out of </span>
 	<input type="text" class="scoreInput" 
 		ng-model="habitLogEntryForm.maxScore" 
 		ng-if="habitLogEntryForm.scoreInputType == 'points'"
@@ -50,7 +48,7 @@
 	/>
 	<input type="submit" ng-click="submitHabitLogEntryForm()" value="Submit" />
 	<br/>
-	<div ng-messages="habitLogEntryForm.score.$error" class="errors">
+	<div ng-messages="habitLogEntryForm.$error" class="errors">
 		<span ng-message="percentScore"> percentage scores must be between 0.00 and 100.00 (inclusive)
 		<span/>
 		<span ng-message="pointScore">points scored must be less than maximum points</span>
@@ -60,6 +58,29 @@
 		<span ng-message="scoreFormat">max score must be a number</span>
 	</div>
 </form>
+<br/>
+<br/>
+<form name="testForm" ng-controller="HabitsCtrl as habits">
+	testInput: <input 
+		ng-model="habits.testInput" 
+		name="testInput"
+		type="text" validate-no-space />
+	
+	<div ng-messages="testForm.testInput.$error" 
+           class="errors">
+           <span ng-message="nospace">no whitespace allowed</span>
+      </div>
+</form>
+<!--
+<form class="testForm" name="testForm">
+	testInput: <input ng-model="testForm.testInput" type="text" class="testInput" validate-no-space />
+	
+	<div ng-messages="testForm.$error" 
+           class="errors">
+           <span ng-message="nospace">no whitespace allowed</span>
+      </div>
+</form>
+-->
 <br/><br/>
 	
 <!--
