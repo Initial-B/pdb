@@ -79,16 +79,24 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			maxScore: ''
 		};
 		
-
+		     $scope.testInput = '1';
+		$scope.test2 = function(){
+       console.log('$scope.testInput: ' + $scope.testInput);
+     };
+	 
+	 
 		//DEBUG: test button function
 		$scope.test = function(){
-			console.log(
+			//console.log(
 //			'HabitsCtrl.testForm.testInput: ' + HabitsCtrl.testForm.testInput +
-			' $scope.testForm.testInput: ' + $scope.testInput +
-			' model.testForm.testInput: ' + model.testInput);
+			//' $scope.testForm.testInput: ' + $scope.testInput +
+			//' model.testForm.testInput: ' + model.testInput);
 			console.log('$scope: ' + PDB.utils.stringifySafe($scope));
-			//console.log('score: ' + $scope.habitLogEntryForm.score
-			//+ ' scoreInputType: ' + $scope.habitLogEntryForm.scoreInputType);
+			console.log('$scope.testInput: ' + $scope.testInput);
+			//console.log('$scope.testForm.tInput: ' + PDB.utils.stringifySafe($scope.testForm.tInput));
+			//console.log('$scope.testForm.tInput.$modelValue: ' + PDB.utils.stringifySafe($scope.testForm.tInput.$modelValue));
+			//console.log('$scope.testForm.testInput: ' + PDB.utils.stringifySafe($scope.testForm.testInput));
+			//console.log('$scope.testForm.testInput.modelValue: ' + PDB.utils.stringifySafe($scope.testForm.testInput.modelValue));
 		};
 		
 		$scope.habitTimeframe = 30;
@@ -262,8 +270,9 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			
 			//modelValue is invalid if it has whitespace
 			ngModel.$validators.nospace = function(modelValue){
-				//console.log('validating testInput: ' + modelValue + ' in ngModel: '
-				// + PDB.utils.stringifySafe(ngModel));
+				//console.log('validating modelValue of testInput: '
+				//+ PDB.utils.stringifySafe(modelValue)
+				//+ ' in ngModel: ' + PDB.utils.stringifySafe(ngModel));
 				if(modelValue
 				&& modelValue != modelValue.replace(/ /g,'')){
 					console.log('testInput: ' + modelValue + ' is invalid');

@@ -1,4 +1,5 @@
 <p>view: habits</p>
+<div ng-controller="HabitsCtrl">
 <button ng-click="getRecentHabitLogs()">Show Recent Habit Logs</button>
 	<label for="habitTimeframeSelect">range: </label>
     <select name="habitTimeframeSelect" id="habitTimeframeSelect" ng-model="habitTimeframe">
@@ -60,16 +61,32 @@
 </form>
 <br/>
 <br/>
-<form name="testForm" ng-controller="HabitsCtrl as habits">
-	testInput: <input 
-		ng-model="habits.testInput" 
-		name="testInput"
-		type="text" validate-no-space />
-	
-	<div ng-messages="testForm.testInput.$error" 
+
+<form name="testForm"> <!-- using name "testForm" should publish the form instance to the scope -->
+	testInput: 
+	<!-- setting name "testInput" on the input should publish the ngModelController of the input as a property on the form instance.
+	In the below case, the input can be accessed in the view as testForm.tInput,
+	and in the scope as $scope.testInput	-->
+	<input 
+		ng-model="testInput" 
+		name="tInput"
+		type="text" validate-no-space 
+	/>
+	<!--
+	<input 
+		ng-model="testInput" 
+		name="tInput"
+		type="text" validate-no-space 
+	/>
+	-->
+	<div ng-messages="testForm.$error" 
            class="errors">
            <span ng-message="nospace">no whitespace allowed</span>
       </div>
+	  
+	  <br/>
+	  <br/>
+	  <button ng-click="test2()">test</button>
 </form>
 <!--
 <form class="testForm" name="testForm">
@@ -129,4 +146,5 @@
 		<td>{{x.score}}</td>
 	  </tr>
 	</table>
+</div>
 </div>
