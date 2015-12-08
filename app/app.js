@@ -123,13 +123,14 @@ PDB.utils = function(){
 	  return (x | 0) === x;
 	};
 	
-	function isFloat(value) {
-	  var x;
-	  if (isNaN(value)) {
+	//TODO: not clear what kind of input is expected.
+	function isNumber(value) {
+	  if(isNaN(value)
+	  || value === null
+	  || value === ''){
 		return false;
 	  }
-	  x = parseFloat(value);
-	  return (x | 10) === x;
+	  return value === Number(value);
 	};
 	
 	//JSON stringify-safe from https://github.com/isaacs/json-stringify-safe
@@ -160,7 +161,7 @@ PDB.utils = function(){
 	};
 	return {
 		isInt: isInt,
-		isFloat: isFloat,
+		isNumber: isNumber,
 		stringifySafe: stringifySafe
 	};	
 }();

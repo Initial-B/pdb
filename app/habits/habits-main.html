@@ -20,44 +20,47 @@
 </canvas>
 </div>
 <p>submit habit log</p>
-<form class="habitLogEntryForm" >
-	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntryForm.logDate" />
+<form name="habitLogEntryForm" class="habitLogEntryForm" >
+	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate" />
 	<br/>
 	Score:
 	<div class="habitScoreInputSelectors">
 		<label>
 			<input type="radio"
-			   ng-model="habitLogEntryForm.scoreInputType"
+			   ng-model="habitLogEntry.scoreInputType"
 			   value="points"> points
 		</label><br/>
 		<label>
 			<input type="radio"
-			   ng-model="habitLogEntryForm.scoreInputType"
+			   ng-model="habitLogEntry.scoreInputType"
 			   value="percent"> percent
 		</label><br/>
 	</div>
 	<input type="text" class="scoreInput" 
-		ng-model="habitLogEntryForm.score" 
+		ng-model="habitLogEntry.score" 
 		scoreInput
 	/>
-	<span ng-if="habitLogEntryForm.scoreInputType == 'percent'">%</span>
-	<span ng-if='habitLogEntryForm.scoreInputType == "points"'> out of </span>
+	<span ng-if="habitLogEntry.scoreInputType == 'percent'">%</span>
+	<span ng-if='habitLogEntry.scoreInputType == "points"'> out of </span>
 	<input type="text" class="scoreInput" 
-		ng-model="habitLogEntryForm.maxScore" 
-		ng-if="habitLogEntryForm.scoreInputType == 'points'"
-		maxScoreInput	
+		ng-model="habitLogEntry.maxScore" 
+		ng-if="habitLogEntry.scoreInputType == 'points'"
+		max-score-input	
 	/>
-	<input type="submit" ng-click="submitHabitLogEntryForm()" value="Submit" />
+	<input type="submit" ng-click="submitHabitLogEntry()" value="Submit" />
 	<br/>
 	<div ng-messages="habitLogEntryForm.$error" class="errors">
-		<span ng-message="percentScore"> percentage scores must be between 0.00 and 100.00 (inclusive)
-		<span/>
+		<span ng-message="percentScore">percentage scores must be between 0.00 and 100.00 (inclusive)
+		</span>
 		<span ng-message="pointScore">points scored must be less than maximum points</span>
 		<span ng-message="scoreFormat">score must be a number</span>
+		<span ng-message="maxscoreformat">max score must be a number</span>
 	</div>
-	<div ng-messages="habitLogEntryForm.maxScore.$error" class="errors">
-		<span ng-message="scoreFormat">max score must be a number</span>
+	<!--
+	<div ng-messages="habitLogEntry.$error" class="errors">
+		<span ng-message="maxscoreformat">max score must be a number</span>
 	</div>
+	-->
 </form>
 <br/>
 <br/>
@@ -69,61 +72,44 @@
 	and in the scope as $scope.testInput	-->
 	<input 
 		ng-model="testInput" 
-		name="tInput"
 		type="text" validate-no-space 
 	/>
-	<!--
-	<input 
-		ng-model="testInput" 
-		name="tInput"
-		type="text" validate-no-space 
-	/>
-	-->
 	<div ng-messages="testForm.$error" 
-           class="errors">
-           <span ng-message="nospace">no whitespace allowed</span>
-      </div>
+        class="errors">
+        <span ng-message="nospace">no whitespace allowed</span>
+    </div>
 	  
-	  <br/>
-	  <br/>
-	  <button ng-click="test2()">test</button>
+	<br/>
+	<br/>
+	<button ng-click="test2()">test</button>
 </form>
-<!--
-<form class="testForm" name="testForm">
-	testInput: <input ng-model="testForm.testInput" type="text" class="testInput" validate-no-space />
-	
-	<div ng-messages="testForm.$error" 
-           class="errors">
-           <span ng-message="nospace">no whitespace allowed</span>
-      </div>
-</form>
--->
+
 <br/><br/>
 	
 <!--
-<form class="habitLogEntryForm" name="habitLogEntryForm">
-	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntryForm.logDate" />
+<form class="habitLogEntry" name="habitLogEntry">
+	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate" />
 	<br/>
 	score (out of 100.00): 
 	<input type="text" 
 	class="scoreInput" 
-	ng-model="habitLogEntryForm.scorePercent" 
-	ng-disabled="habitLogEntryForm.scorePercentDisabled"
+	ng-model="habitLogEntry.scorePercent" 
+	ng-disabled="habitLogEntry.scorePercentDisabled"
 	scorePercent
 	/>
 	-or- 
 	<input type="text" class="scoreInput"
-	ng-model="habitLogEntryForm.scorePoints"
-	ng-disabled="habitLogEntryForm.scorePointsDisabled"
+	ng-model="habitLogEntry.scorePoints"
+	ng-disabled="habitLogEntry.scorePointsDisabled"
 	scorePoints
 	/>
 	/ 
 	<input type="text" class="scoreInput" 
-	ng-model="habitLogEntryForm.maxPoints"
-	ng-disabled="habitLogEntryForm.maxPointsDisabled"
+	ng-model="habitLogEntry.maxPoints"
+	ng-disabled="habitLogEntry.maxPointsDisabled"
 	maxPoints
 	/>
-	<div ng-messages="habitLogEntryForm.$error" class="errors">
+	<div ng-messages="habitLogEntry.$error" class="errors">
 		<span ng-message="scorePercent"> percentage scores must be between 0.00 and 100.00 (inclusive)
 		<span/>
 		<span ng-message="scorePoints">points scored must be less than maximum points</span>
@@ -131,7 +117,7 @@
 	<br/>
 	<br/>
 	<input type="button" ng-click="reset()" value="Reset" />
-    <input type="submit" ng-click="submitHabitLogEntryForm(habitLogEntryForm)" value="Submit" />
+    <input type="submit" ng-click="submitHabitLogEntryForm(habitLogEntry)" value="Submit" />
 </form>
 -->
 <br/>

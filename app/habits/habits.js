@@ -72,54 +72,50 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		var model = this;
 		$scope.chartUtils = PDB.chartUtils;
 		
-		$scope.habitLogEntryForm = {
+		$scope.habitLogEntry = {
 			logDate: '',
 			scoreInputType: 'points',
 			score: '',
 			maxScore: ''
 		};
 		
-		     $scope.testInput = '1';
+		$scope.testInput = '1';
 		$scope.test2 = function(){
-       console.log('$scope.testInput: ' + $scope.testInput);
-     };
+			console.log('$scope.testInput: ' + $scope.testInput);
+		};
 	 
 	 
 		//DEBUG: test button function
 		$scope.test = function(){
-			//console.log(
-//			'HabitsCtrl.testForm.testInput: ' + HabitsCtrl.testForm.testInput +
-			//' $scope.testForm.testInput: ' + $scope.testInput +
-			//' model.testForm.testInput: ' + model.testInput);
-			console.log('$scope: ' + PDB.utils.stringifySafe($scope));
-			console.log('$scope.testInput: ' + $scope.testInput);
-			//console.log('$scope.testForm.tInput: ' + PDB.utils.stringifySafe($scope.testForm.tInput));
-			//console.log('$scope.testForm.tInput.$modelValue: ' + PDB.utils.stringifySafe($scope.testForm.tInput.$modelValue));
-			//console.log('$scope.testForm.testInput: ' + PDB.utils.stringifySafe($scope.testForm.testInput));
-			//console.log('$scope.testForm.testInput.modelValue: ' + PDB.utils.stringifySafe($scope.testForm.testInput.modelValue));
+			console.log('$scope.habitLogEntry: ' + JSON.stringify($scope.habitLogEntry));
+			console.log('$scope.habitLogEntry.$error: '
+				+ JSON.stringify($scope.habitLogEntry.$error));
+			console.log('$scope.habitLogEntry.maxScore.$error: '
+				+ JSON.stringify($scope.habitLogEntry.maxScore.$error));
+			
 		};
 		
 		$scope.habitTimeframe = 30;
 
 		//submit habit log form using HabitsAPI
-		$scope.submitHabitLogEntryForm = function(){
+		$scope.submitHabitLogEntry = function(){
 			//TODO: validate form inputs
 			
 			var calculatedScore;
-			if($scope.habitLogEntryForm.scoreInputType == 'percent'){
-				$scope.habitLogEntryForm.maxScore = 100;
+			if($scope.habitLogEntry.scoreInputType == 'percent'){
+				$scope.habitLogEntry.maxScore = 100;
 			}
 			
-			calculatedScore = 100 * $scope.habitLogEntryForm.score / $scope.habitLogEntryForm.maxScore;
+			calculatedScore = 100 * $scope.habitLogEntry.score / $scope.habitLogEntry.maxScore;
 			
 			//$scope.$apply();
 			console.log('creating habitLogEntry from form fields score: '
-				+ $scope.habitLogEntryForm.score + ' scoreInputType: ' + $scope.habitLogEntryForm.scoreInputType
-				+ ' maxScore: ' + $scope.habitLogEntryForm.maxScore);
+				+ $scope.habitLogEntry.score + ' scoreInputType: ' + $scope.habitLogEntry.scoreInputType
+				+ ' maxScore: ' + $scope.habitLogEntry.maxScore);
 			
 			//create habitLogentry
 			var habitLogEntry = {
-				logDate: $scope.habitLogEntryForm.logDate,
+				logDate: $scope.habitLogEntry.logDate,
 				score: calculatedScore
 			}
 			console.log('submitting habit log entry with logDate: ' + habitLogEntry.logDate
@@ -173,12 +169,13 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		};
 		
 		//returns true if value is a positive float or is not set
+		//TODO: this should work for general usage, but need to make tighter (along with utils.isNumber)
 		$scope.checkScoreFormat = function(value){
 			if(value === undefined
 			|| value === null
 			|| value === ''){
 				return true;
-			}else if(PDB.utils.isFloat(value)
+			}else if(PDB.utils.isNumber(parseFloat(value))
 			&& parseFloat(value) >=0){
 				return true;
 			}
@@ -207,9 +204,9 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
         require: 'ngModel',
         link: function(scope, element, attributes, ngModel) {
 			console.log('validating score field with modelValue: ' + modelValue
-			+ ' and scoreInputType: ' + scope.habitLogEntryForm.scoreInputType);
+			+ ' and scoreInputType: ' + scope.habitLogEntry.scoreInputType);
 			
-			var maxScore = scope.habitLogEntryForm.maxScore;
+			var maxScore = scope.habitLogEntry.maxScore;
 			
 			//number format validator
 			ngModel.$validators.scoreFormat = function(modelValue){
@@ -222,7 +219,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			//point score validator
 			// - returns false if score is greater than maxScore
 			ngModel.$validators.pointScore = function(modelValue) {
-				if(scope.habitLogEntryForm.scoreInputType === 'points'){
+				if(scope.habitLogEntry.scoreInputType === 'points'){
 					if(scope.checkScoreFormat(maxScore)
 					&& scope.checkScoreFormat(modelValue)
 					&& parseFloat(modelValue) > parseFloat(maxScore)){
@@ -234,7 +231,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			//percent score validator
 			// - returns false if score is greater than 100
             ngModel.$validators.percentScore = function(modelValue) {
-				if(scope.habitLogEntryForm.scoreInputType === 'percent'){
+				if(scope.habitLogEntry.scoreInputType === 'percent'){
 					if(scope.checkScoreFormat(modelValue)
 					&& modelValue > 100){
 						return false;
@@ -250,12 +247,13 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
         restrict: "A",  
         require: 'ngModel',
         link: function(scope, element, attributes, ngModel) {
-			console.log('validating maxScore field with modelValue: ' + modelValue);
 			//number format validator
-			ngModel.$validators.scoreFormat = function(modelValue){
+			ngModel.$validators.maxscoreformat = function(modelValue){	
 				if(!scope.checkScoreFormat(modelValue)){
+				console.log('maxScore: ' + modelValue + ' is invalid');
 					return false;
 				}
+				console.log('maxScore: ' + modelValue + ' is valid');
 				return true;
 			};
 		}
