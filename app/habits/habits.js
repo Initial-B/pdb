@@ -143,9 +143,10 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			
 			habitsAPI.getHabitLogs(startDate).then(
 				function(response){
+					//console.log('getHabitLogs response: '
+					// + PDB.utils.stringifySafe(response));
 					if(response.data['responseCode'] == 'success'){
 						$scope.recentHabitLogs = response.data['habitLogs'];
-						console.log('recentHabitLogs: ' + JSON.stringify($scope.recentHabitLogs));
 					}//else display some error message
 					
 					var labels = [];
@@ -202,14 +203,9 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
     return {
         restrict: "A",  
         require: 'ngModel',
-        link: function(scope, element, attributes, ngModel) {
-			console.log('validating score field with modelValue: ' + modelValue
-			+ ' and scoreInputType: ' + scope.habitLogEntry.scoreInputType);
-			
-			var maxScore = scope.habitLogEntry.maxScore;
-			
+        link: function(scope, element, attributes, ngModel) {		
 			//number format validator
-			ngModel.$validators.scoreFormat = function(modelValue){
+			ngModel.$validators.scoreformat = function(modelValue){
 				if(!scope.checkScoreFormat(modelValue)){
 					return false;
 				}
@@ -218,7 +214,8 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			
 			//point score validator
 			// - returns false if score is greater than maxScore
-			ngModel.$validators.pointScore = function(modelValue) {
+			ngModel.$validators.pointscore = function(modelValue) {
+				var maxScore = scope.habitLogEntry.maxScore;
 				if(scope.habitLogEntry.scoreInputType === 'points'){
 					if(scope.checkScoreFormat(maxScore)
 					&& scope.checkScoreFormat(modelValue)
@@ -230,7 +227,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			};
 			//percent score validator
 			// - returns false if score is greater than 100
-            ngModel.$validators.percentScore = function(modelValue) {
+            ngModel.$validators.percentscore = function(modelValue) {
 				if(scope.habitLogEntry.scoreInputType === 'percent'){
 					if(scope.checkScoreFormat(modelValue)
 					&& modelValue > 100){
@@ -263,14 +260,9 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
     return {
         restrict: "A",  
         require: 'ngModel',
-        link: function(scope, element, attributes, ngModel) {
-			//console.log('creating validators for ngModel: ' + PDB.utils.stringifySafe(ngModel));
-			
+        link: function(scope, element, attributes, ngModel) {		
 			//modelValue is invalid if it has whitespace
 			ngModel.$validators.nospace = function(modelValue){
-				//console.log('validating modelValue of testInput: '
-				//+ PDB.utils.stringifySafe(modelValue)
-				//+ ' in ngModel: ' + PDB.utils.stringifySafe(ngModel));
 				if(modelValue
 				&& modelValue != modelValue.replace(/ /g,'')){
 					console.log('testInput: ' + modelValue + ' is invalid');

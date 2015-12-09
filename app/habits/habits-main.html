@@ -1,5 +1,4 @@
 <p>view: habits</p>
-<div ng-controller="HabitsCtrl">
 <button ng-click="getRecentHabitLogs()">Show Recent Habit Logs</button>
 	<label for="habitTimeframeSelect">range: </label>
     <select name="habitTimeframeSelect" id="habitTimeframeSelect" ng-model="habitTimeframe">
@@ -38,7 +37,7 @@
 	</div>
 	<input type="text" class="scoreInput" 
 		ng-model="habitLogEntry.score" 
-		scoreInput
+		score-input
 	/>
 	<span ng-if="habitLogEntry.scoreInputType == 'percent'">%</span>
 	<span ng-if='habitLogEntry.scoreInputType == "points"'> out of </span>
@@ -50,10 +49,10 @@
 	<input type="submit" ng-click="submitHabitLogEntry()" value="Submit" />
 	<br/>
 	<div ng-messages="habitLogEntryForm.$error" class="errors">
-		<span ng-message="percentScore">percentage scores must be between 0.00 and 100.00 (inclusive)
+		<span ng-message="percentscore">percentage scores must be between 0.00 and 100.00 (inclusive)
 		</span>
-		<span ng-message="pointScore">points scored must be less than maximum points</span>
-		<span ng-message="scoreFormat">score must be a number</span>
+		<span ng-message="pointscore">points scored must be less than maximum points</span>
+		<span ng-message="scoreformat">score must be a number</span>
 		<span ng-message="maxscoreformat">max score must be a number</span>
 	</div>
 	<!--
@@ -132,5 +131,4 @@
 		<td>{{x.score}}</td>
 	  </tr>
 	</table>
-</div>
 </div>
