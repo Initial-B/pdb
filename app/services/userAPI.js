@@ -4,8 +4,8 @@
     var serviceID = 'userAPI';
 	var ns = 'pdb.' + serviceID;
 	
-	angular.module('pdb').factory(serviceID, ['$http',userAPI]);
-	function userAPI($http){
+	angular.module('pdb').factory(serviceID, ['$http', 'loginModal', userAPI]);
+	function userAPI($http, loginModal){
 		//set userID and sessionID from localStorage, using empty string if not set
 		var userID = (window.localStorage[ns + '.userID'] ? 
 			window.localStorage[ns + '.userID'] : '');
@@ -108,6 +108,16 @@
 			});
 		};
 		
+		function loginPrompt(callbackFunction){
+			console.log('entered userAPI.loginPrompt()');
+			loginModal().then(function(loginResponse){
+				console.log('loginResponse: ' + PDB.utils.stringifySafe(loginResponse));
+				//TODO: if loginResponse is successful, return result of callbackFunction
+				// 		- something about promises?
+			});
+			
+		};
+		
 		return{
 			getUserID: getUserID,
 			setUserID: setUserID,
@@ -118,7 +128,8 @@
 			isLoggedIn: isLoggedIn,
 			login: login,
 			logout: logout,
-			getUserInfo: getUserInfo
+			getUserInfo: getUserInfo,
+			loginPrompt: loginPrompt
 		};
 	};
 	

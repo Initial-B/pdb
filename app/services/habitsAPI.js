@@ -7,7 +7,6 @@
 	angular.module('pdb').factory(serviceID, ['$http', 'userAPI', habitsAPI]);
 	function habitsAPI($http, userAPI){
 	
-	
 		function submitHabitLog(habitLog){
 			/*
 				required: ownClass, opponentClass, coin, result

@@ -96,7 +96,7 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 				console.log("[app.js] current userID not found, calling loginModal");
 				loginModal().then(function(){
 					return $state.go(toState.name, toParams);
-				}).catch(function(){
+				}).catch(function(){//catch login errors
 					return $state.go('home');
 				});
 			}
