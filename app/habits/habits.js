@@ -104,11 +104,9 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			var calculatedScore;
 			if($scope.habitLogEntry.scoreInputType == 'percent'){
 				$scope.habitLogEntry.maxScore = 100;
-			}
-			
+			}	
 			calculatedScore = 100 * $scope.habitLogEntry.score / $scope.habitLogEntry.maxScore;
 			
-			//$scope.$apply();
 			console.log('creating habitLogEntry from form fields score: '
 				+ $scope.habitLogEntry.score + ' scoreInputType: ' + $scope.habitLogEntry.scoreInputType
 				+ ' maxScore: ' + $scope.habitLogEntry.maxScore);

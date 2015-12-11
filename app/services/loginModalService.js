@@ -4,7 +4,7 @@
     var serviceID = 'loginModal';
 	
 	angular.module('pdb').factory(serviceID, ['$modal','$rootScope',loginModal]);
-	function loginModal($modal,$rootScope, callbackFunction){
+	function loginModal($modal, $rootScope){
 
 	  function assignCurrentUser (loginResponse) {
 		//$rootScope.currentUser = loginResponse;
