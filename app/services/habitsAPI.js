@@ -6,12 +6,11 @@
 	
 	angular.module('pdb').factory(serviceID, ['$http', 'userAPI', habitsAPI]);
 	function habitsAPI($http, userAPI){
-	
+		/*
+			required: ownClass, opponentClass, coin, result
+			- Controller can autofill ownClass on deck selection, and specify defaults for all values
+		*/
 		function submitHabitLog(habitLog){
-			/*
-				required: ownClass, opponentClass, coin, result
-				- Controller can autofill ownClass on deck selection, and specify defaults for all values
-			*/
 			var userID = userAPI.getUserID();
 			var sessionID = userAPI.getSessionID();
 			console.log('submitting habit log with userID: ' + userID + ' sessionID: ' + sessionID  + ' score: ' + habitLog.score);
@@ -78,7 +77,7 @@
 				}
 			);
 		};
-	
+		
 		return{
 			submitHabitLog: submitHabitLog,
 			getHabitLogs: getHabitLogs

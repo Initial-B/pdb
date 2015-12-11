@@ -108,15 +108,13 @@
 			});
 		};
 		
-		function loginPrompt(callbackFunction){
-			console.log('entered userAPI.loginPrompt()');
-			loginModal().then(function(loginResponse){
-				console.log('loginResponse: ' + PDB.utils.stringifySafe(loginResponse));
-				//TODO: if loginResponse is successful, return result of callbackFunction
-				// 		- something about promises?
-			});
-			
+		//return the deferred loginResponse from loginModal()
+		function loginPrompt(){
+			console.log('[userAPI.loginPrompt] returning loginResponse (deferred by loginModal)');
+			return loginModal();
 		};
+		
+
 		
 		return{
 			getUserID: getUserID,

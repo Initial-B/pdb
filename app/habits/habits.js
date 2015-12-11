@@ -66,8 +66,8 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 	};
 })
 */
-.controller('HabitsCtrl', ['$scope', 'habitsAPI',
-	function($scope, habitsAPI) {
+.controller('HabitsCtrl', ['$scope', 'habitsAPI', 'userAPI',
+	function($scope, habitsAPI, userAPI) {
 	
 		var model = this;
 		$scope.chartUtils = PDB.chartUtils;
@@ -80,19 +80,19 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		};
 		
 		$scope.testInput = '1';
-		$scope.test2 = function(){
-			console.log('$scope.testInput: ' + $scope.testInput);
+
+	 
+	 
+		//DEBUG: test button functions
+		$scope.test1 = function(){
+		
+			console.log('calling loginPrompt with alert callback in habits.js');
+			userAPI.loginPrompt().then(function(loginResponse){
+				alert('loginResponse: ' + PDB.utils.stringifySafe(loginResponse));
+			});
 		};
-	 
-	 
-		//DEBUG: test button function
-		$scope.test = function(){
-			console.log('$scope.habitLogEntry: ' + JSON.stringify($scope.habitLogEntry));
-			console.log('$scope.habitLogEntry.$error: '
-				+ JSON.stringify($scope.habitLogEntry.$error));
-			console.log('$scope.habitLogEntry.maxScore.$error: '
-				+ JSON.stringify($scope.habitLogEntry.maxScore.$error));
-			
+		$scope.test2 = function(){
+
 		};
 		
 		$scope.habitTimeframe = 30;
