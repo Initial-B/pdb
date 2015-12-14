@@ -4,8 +4,8 @@
     var serviceID = 'userAPI';
 	var ns = 'pdb.' + serviceID;
 	
-	angular.module('pdb').factory(serviceID, ['$http', 'loginModal', userAPI]);
-	function userAPI($http, loginModal){
+	angular.module('pdb').factory(serviceID, ['$http', '$modal','$rootScope', userAPI]);
+	function userAPI($http, $modal, $rootScope){
 		//set userID and sessionID from localStorage, using empty string if not set
 		var userID = (window.localStorage[ns + '.userID'] ? 
 			window.localStorage[ns + '.userID'] : '');
@@ -110,12 +110,23 @@
 		
 		//return the deferred loginResponse from loginModal()
 		function loginPrompt(){
-			console.log('[userAPI.loginPrompt] returning loginResponse (deferred by loginModal)');
-			return loginModal();
+			/*
+			function assignCurrentUser (loginResponse) {
+				//$rootScope.currentUser = loginResponse;
+				console.log('[userAPI.js assignCurrentUser()] loginResponse: '
+					+ PDB.utils.stringifySafe(loginResponse));
+				return loginResponse;
+			};
+			*/
+			var instance = $modal.open({
+			  templateUrl: 'login/loginModalTemplate.html',
+			  controller: 'LoginModalCtrl',
+			  controllerAs: 'LoginModalCtrl'
+			});
+			//return instance.result.then(assignCurrentUser);
+			return instance.result;
 		};
-		
 
-		
 		return{
 			getUserID: getUserID,
 			setUserID: setUserID,

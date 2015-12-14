@@ -78,11 +78,11 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 
 }])
 */
-.run(['$rootScope', '$state', 'loginModal', 'userAPI',
-	function($rootScope, $state, loginModal, userAPI){
+.run(['$rootScope', '$state', 'userAPI',
+	function($rootScope, $state, userAPI){
 	
 		//subscribe to ui-router's 'stateChangeStart' event
-		// and call the loginModal service when unauth'd users
+		// and call loginPrompt when unauth'd users
 		// change to states that require login		
 		$rootScope.$on('$stateChangeStart', function(event, toState, toParams){
 			var requireLogin = toState.data.requireLogin;
@@ -93,8 +93,8 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 			// if state requires login and currentUser is undefined, show login prompt
 			if(requireLogin && (userAPI.getUserID() == null || userAPI.getUserID() === '')){
 				event.preventDefault();
-				console.log("[app.js] current userID not found, calling loginModal");
-				loginModal().then(function(){
+				console.log("[app.js] current userID not found, calling loginPrompt");
+				userAPI.loginPrompt().then(function(){
 					return $state.go(toState.name, toParams);
 				}).catch(function(){//catch login errors
 					return $state.go('home');

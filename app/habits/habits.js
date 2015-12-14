@@ -13,59 +13,6 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		datasetFill: false //whether to fill the dataset with a color
 	});
 }])
-/*
-	validation directives
-	TODO: combine input disabler code into these directives
-*/
-//validate score based on scoreInputType
-/*
-.directive("score", function() {
-	return {
-		restrict: "A",
-		require: ['^form', 'ngModel'],
-		link: function(scope, element, attributes, controllers) {
-		var form = controllers[0];
-		var ngModel = controllers[1];
-			ngModel.$validators.scorePercent = function(scorePercent) {
-				if(!element.prop("disabled")
-				&& scorePercent != null){
-				//console.log('validating score on form: ' + JSON.stringify(form.));
-					console.log('validating percentage score: ' + scorePercent
-						+ '  result: ' + (scorePercent >= 0 && scorePercent <= 100));
-					return (scorePercent >= 0 && scorePercent <= 100);
-				}else{
-					console.log('scorePercent element is null, no need to validate');
-					return true;
-				}
-				
-			}
-		}
-	};
-})
-*/
-/*
-//example of directive  that accesses multiple form inputs
-.directive('scoreInputOption', function(){
-	return{
-		require: ['^form', 'ngModel'],
-		restrict: 'A',
-		link: function (scope, element, attrs, controllers) {
-			var form = controllers[0];
-			var ngModel = controllers[1];
-			var scoreInputChangeListener = function(event){
-				console.log('change on ' + attrs.scoreInputOption);
-				if(form){
-					if(attrs.scoreInputOption == 'score'){
-						console.log('changing value of score to ' + ngModel.$viewValue);
-						console.log('input model: ' + JSON.stringify(ngModel));
-					}
-				}
-			};
-			element.bind('change', scoreInputChangeListener)
-		}
-	};
-})
-*/
 .controller('HabitsCtrl', ['$scope', 'habitsAPI', 'userAPI',
 	function($scope, habitsAPI, userAPI) {
 	
@@ -81,12 +28,11 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		
 		$scope.testInput = '1';
 
-	 
-	 
 		//DEBUG: test button functions
 		$scope.test1 = function(){
 		
-			console.log('calling loginPrompt with alert callback in habits.js');
+			console.log('[habits.js] calling loginPrompt');
+			//console.log(userAPI.loginPrompt());
 			userAPI.loginPrompt().then(function(loginResponse){
 				alert('loginResponse: ' + PDB.utils.stringifySafe(loginResponse));
 			});
@@ -183,8 +129,6 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		
 	//private functions
 
-		
-
 	//init functions
 
 		//initial page setup: show habit scores for past month
@@ -197,6 +141,10 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		 */
 	}
 ])
+/*
+	validation directives
+	TODO: combine input disabler code into these directives
+*/
 .directive("scoreInput", function() {
     return {
         restrict: "A",  
