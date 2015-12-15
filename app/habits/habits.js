@@ -89,7 +89,8 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				function(response){
 					//console.log('getHabitLogs response: '
 					// + PDB.utils.stringifySafe(response));
-					if(response.data['responseCode'] == 'success'){
+					if(response.data
+					&& response.data['responseCode'] == 'success'){
 						$scope.recentHabitLogs = response.data['habitLogs'];
 					}//else display some error message
 					

@@ -61,12 +61,20 @@
 				}
 			}).then(
 				function(response){
-					//console.log('server response: ' + JSON.stringify(response.data));
+					console.log('server response: ' + JSON.stringify(response.data));
 					if(response.data['newSessionID']){
 						userAPI.setSessionID(response.data['newSessionID']);
 						if(response.data['responseCode'] == 'success'){
 							//do something? or handle in calling controller
 						}
+					}
+					//TEST: resend request on invalid session
+					else if(response.data['responseMessage'] 
+					&& response.data['responseMessage'].startsWith(userAPI.constants.ERROR_INVALID_SESSION)){
+						console.log('invalid session, calling userAPI.loginPrompt()');
+						return userAPI.loginPrompt().then(function(){
+							getHabitLogs(startDate);
+						});
 					}
 					return response;
 				}

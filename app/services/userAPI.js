@@ -6,6 +6,10 @@
 	
 	angular.module('pdb').factory(serviceID, ['$http', '$modal','$rootScope', userAPI]);
 	function userAPI($http, $modal, $rootScope){
+		var constants = {
+			ERROR_INVALID_SESSION: "invalid session"
+		};
+	
 		//set userID and sessionID from localStorage, using empty string if not set
 		var userID = (window.localStorage[ns + '.userID'] ? 
 			window.localStorage[ns + '.userID'] : '');
@@ -128,6 +132,7 @@
 		};
 
 		return{
+			constants: constants,
 			getUserID: getUserID,
 			setUserID: setUserID,
 			getLastUserID: getLastUserID,
