@@ -72,15 +72,29 @@
 					else if(response.data['responseMessage'] 
 					&& response.data['responseMessage'].startsWith(userAPI.constants.ERROR_INVALID_SESSION)){
 						console.log('invalid session, calling userAPI.loginPrompt()');
-						return userAPI.loginPrompt().then(function(){
-							getHabitLogs(startDate);
-						});
+						return userAPI.loginPrompt().then(
+							function successCallback(result){
+								//resend request if login was successful
+								//TODO: check if login successful in loginPrompt?
+								if(result.data
+								&& result.data.responseCode === "success"){
+									console.log('[habitsAPI.js] loginPrompt result: '
+									+ PDB.utils.stringifySafe(result) + ' resending getHabitLogs() request');
+									return getHabitLogs(startDate);
+								}
+							},
+							function errorCallback(reason){
+								console.log('[habitsAPI.js] loginPrompt failure callback reached for reason: '
+								+ PDB.utils.stringifySafe(reason));
+							}
+						);
 					}
 					return response;
 				}
 			).catch(
 				function(response) {
-					console.log('status: ' + response.status + ' data: ' + JSON.stringify(response.data));
+					console.log('status: ' + response.status
+					+ ' data: ' + JSON.stringify(response.data));
 					return response;
 				}
 			);

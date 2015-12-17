@@ -4,8 +4,8 @@
     var serviceID = 'userAPI';
 	var ns = 'pdb.' + serviceID;
 	
-	angular.module('pdb').factory(serviceID, ['$http', '$modal','$rootScope', userAPI]);
-	function userAPI($http, $modal, $rootScope){
+	angular.module('pdb').factory(serviceID, ['$http', '$modal','$rootScope', '$state', userAPI]);
+	function userAPI($http, $modal, $rootScope, $state){
 		var constants = {
 			ERROR_INVALID_SESSION: "invalid session"
 		};
@@ -128,7 +128,21 @@
 			  controllerAs: 'LoginModalCtrl'
 			});
 			//return instance.result.then(assignCurrentUser);
-			return instance.result;
+			return instance.result.then(
+				//success callback; returns the deffered result object
+				function loginSuccess(result){
+					console.log('[userAPI.js] loginPrompt successCallback reached');
+					return result;
+				},
+				//failure callback: 
+				function loginFailure(reason){
+					console.log('[userAPI.js] login failureCallback reached for reason: '
+					+ PDB.utils.stringifySafe(reason));
+					
+					return $state.go('home');
+					//return reason;
+				}
+			);
 		};
 
 		return{

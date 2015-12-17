@@ -86,17 +86,20 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 		// change to states that require login		
 		$rootScope.$on('$stateChangeStart', function(event, toState, toParams){
 			var requireLogin = toState.data.requireLogin;
-			if(requireLogin){
-				console.log("[app.js] requested state requires login. current userID: "
-					+ userAPI.getUserID());
-			}
+			console.log('[app.js] requested state: ' + toState.url + ' requires login: ' + requireLogin + ' current userID: ' + userAPI.getUserID());
+			
+			//if(requireLogin){
+				//console.log('[app.js] requested state: ' + toState.url + ' requires login. current userID: ' + userAPI.getUserID());
+			//}
 			// if state requires login and currentUser is undefined, show login prompt
 			if(requireLogin && (userAPI.getUserID() == null || userAPI.getUserID() === '')){
 				event.preventDefault();
 				console.log("[app.js] current userID not found, calling loginPrompt");
-				userAPI.loginPrompt().then(function(){
+				userAPI.loginPrompt().then(function(result){
+					console.log('[app.js] loginPrompt success callback result: ' + PDB.utils.stringifySafe(result));
 					return $state.go(toState.name, toParams);
-				}).catch(function(){//catch login errors
+				}).catch(function(reason){//catch login errors
+					console.log('[app.js] loginPrompt error callback reason: ' + PDB.utils.stringifySafe(reason));
 					return $state.go('home');
 				});
 			}
