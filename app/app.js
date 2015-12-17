@@ -95,10 +95,15 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 			if(requireLogin && (userAPI.getUserID() == null || userAPI.getUserID() === '')){
 				event.preventDefault();
 				console.log("[app.js] current userID not found, calling loginPrompt");
-				userAPI.loginPrompt().then(function(result){
-					console.log('[app.js] loginPrompt success callback result: ' + PDB.utils.stringifySafe(result));
-					return $state.go(toState.name, toParams);
-				}).catch(function(reason){//catch login errors
+				userAPI.loginPrompt().then(function(loginResult){
+					console.log('[app.js] loginPrompt result: ' + PDB.utils.stringifySafe(result));
+					//if login is successful, redirect to desired state
+					if(loginResult
+					&& loginResult.data
+					&& loginResult.data['responseCode'] === 'success'){			
+						return $state.go(toState.name, toParams);
+					}
+				}).catch(function(reason){//catch loginPrompt errors
 					console.log('[app.js] loginPrompt error callback reason: ' + PDB.utils.stringifySafe(reason));
 					return $state.go('home');
 				});

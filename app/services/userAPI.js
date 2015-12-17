@@ -128,21 +128,23 @@
 			  controllerAs: 'LoginModalCtrl'
 			});
 			//return instance.result.then(assignCurrentUser);
-			return instance.result.then(
+			return instance.result
+			
+			.then(
 				//success callback; returns the deffered result object
-				function loginSuccess(result){
-					console.log('[userAPI.js] loginPrompt successCallback reached');
+				function loginModalCallback(result){
+					console.log('[userAPI.js] loginPrompt loginModalCallback reached');
 					return result;
 				},
-				//failure callback: 
-				function loginFailure(reason){
-					console.log('[userAPI.js] login failureCallback reached for reason: '
+				//failure callback: redirect home, clear userID/sessionID, and return failure reason
+				function loginModalErrorCallback(reason){
+					console.log('[userAPI.js] loginModalErrorCallback reached for reason: '
 					+ PDB.utils.stringifySafe(reason));
-					
-					return $state.go('home');
-					//return reason;
+					$state.go('home');
+					return reason;
 				}
 			);
+			/**/
 		};
 
 		return{
