@@ -96,7 +96,7 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 				event.preventDefault();
 				console.log("[app.js] current userID not found, calling loginPrompt");
 				userAPI.loginPrompt().then(function(loginResult){
-					console.log('[app.js] loginPrompt result: ' + PDB.utils.stringifySafe(result));
+					console.log('[app.js] loginPrompt result: ' + PDB.utils.stringifySafe(loginResult));
 					//if login is successful, redirect to desired state
 					if(loginResult
 					&& loginResult.data

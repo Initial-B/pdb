@@ -10,7 +10,7 @@ angular.module('pdb')
 
 	$scope.isLoggedIn = userAPI.isLoggedIn();
 	$scope.userLogin = {
-		username: '',
+		username: userAPI.getLastUserID(),
 		password: ''
 	};
 	

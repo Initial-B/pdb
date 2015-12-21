@@ -41,8 +41,6 @@
 		function isLoggedIn(){
 			return !(getUserID()==='' || getSessionID()==='');
 		};
-		
-		
 
 		function login(uID, password){
 			//console.log('entered userAPI with userID: ' + uID + ' password: ' + password);
@@ -85,14 +83,13 @@
 				}
 			}).then(
 				function(response) {
-					setSessionID('');
-					setUserID('');
+					clearCredentials();
 					console.log('logout response: ' + response.data);
 					return response;
 				}
 			).catch(
 				function(response) {
-					setSessionID('');
+					clearCredentials();
 					console.log('logout response status: ' + response.status + ' data: ' + JSON.stringify(response.data));
 					return response;
 				}
@@ -140,11 +137,20 @@
 				function loginModalErrorCallback(reason){
 					console.log('[userAPI.js] loginModalErrorCallback reached for reason: '
 					+ PDB.utils.stringifySafe(reason));
+					clearCredentials();
 					$state.go('home');
 					return reason;
 				}
 			);
 			/**/
+		};
+		
+		//private methods
+		
+		//clear userID & sessionID
+		var clearCredentials = function(){
+			setSessionID('');
+			setUserID('');
 		};
 
 		return{
