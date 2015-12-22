@@ -2,7 +2,7 @@
 
 angular.module('pdb')
 
-.controller('HomeCtrl', ['$scope', 'userAPI', function($scope, userAPI) {
+.controller('HomeCtrl', ['$scope', 'userAPI', 'habitsAPI', function($scope, userAPI, habitsAPI) {
 	//test
 	$scope.userID = userAPI.getUserID();
 	$scope.lastUserID = userAPI.getLastUserID();
@@ -12,6 +12,16 @@ angular.module('pdb')
 	$scope.userLogin = {
 		username: userAPI.getLastUserID(),
 		password: ''
+	};
+	
+	$scope.devStats = {
+		deviceReady: false,
+		userAgent: 'unknown',
+		screenDimensions: 'unknown',
+		windowDimensions: 'unknown',
+		deviceOrientation: 'portrait',
+		userEmail: '',
+		averageHabitScore: 0,
 	};
 	
 	//called by loginForm
@@ -34,18 +44,21 @@ angular.module('pdb')
 	
 	$scope.getUserInfo = function(){
 		userAPI.getUserInfo($scope.userID, $scope.sessionID).then(
-			function(data, status){
-				//TODO: do something with results involving $scope.devStats
+			function(response){
+				console.log('getUserInfo response: ' + PDB.utils.stringifySafe(response));
+			//TODO: do something with results involving $scope.devStats				
+				if(response
+				&& response.data
+				&& response.data['responseCode'] == 'success'){
+					habitsAPI.averageScore(14).then(function(result){
+						$scope.devStats.averageHabitScore = parseFloat(result).toFixed(2);
+						console.log('[home.js] $scope.devStats.averageHabitScore: '
+						+ PDB.utils.stringifySafe($scope.devStats.averageHabitScore));
+					});
+				}
+				
 			}
 		);	
 	};
-	
-	$scope.devStats = {
-		deviceReady: false,
-		userAgent: 'unknown',
-		screenDimensions: 'unknown',
-		windowDimensions: 'unknown',
-		deviceOrientation: 'portrait',
-		userEmail: '',
-	};
+
 }]);

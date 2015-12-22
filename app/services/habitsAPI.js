@@ -100,9 +100,40 @@
 			);
 		};
 		
+
+		
+		function daysAgoToDate(daysAgo){
+			return moment().subtract(daysAgo, 'days').format('YYYY-MM-DD');
+		};
+		
+		/*
+			return the average score over the duration (inclusive)
+		*/
+		function averageScore(daysAgo){
+			var startDate = daysAgoToDate(daysAgo);
+			return getHabitLogs(startDate).then(
+				function(response){
+					var sum = 0;
+					var averageScore = -1;
+					if(response
+					&& response.data
+					&& response.data['responseCode'] == 'success'){
+						var habitLogs = response.data['habitLogs'];
+						for(var x = 0;x < habitLogs.length;x++){
+							sum += parseFloat(habitLogs[x]['score']);
+						}
+						averageScore = sum/(habitLogs.length);
+					}
+					console.log('average habit score: ' + averageScore);
+					return averageScore;
+				});
+		};
+		
 		return{
 			submitHabitLog: submitHabitLog,
-			getHabitLogs: getHabitLogs
+			getHabitLogs: getHabitLogs,
+			daysAgoToDate: daysAgoToDate,
+			averageScore: averageScore
 		}
 	};
 })();

@@ -81,7 +81,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			}
 			if(daysAgo >= 0){
 				//get formatted relative date using moment.js
-				startDate = moment().subtract(daysAgo, 'days').format('YYYY-MM-DD');
+				startDate = habitsAPI.daysAgoToDate(daysAgo);
 			}
 			console.log('calling habitsAPI.getHabitLogs() with startDate: ' + startDate);
 			
@@ -195,10 +195,8 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			//number format validator
 			ngModel.$validators.maxscoreformat = function(modelValue){	
 				if(!scope.checkScoreFormat(modelValue)){
-				console.log('maxScore: ' + modelValue + ' is invalid');
 					return false;
 				}
-				console.log('maxScore: ' + modelValue + ' is valid');
 				return true;
 			};
 		}
