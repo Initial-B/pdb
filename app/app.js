@@ -117,7 +117,7 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 PDB.chartUtils = {
 	//takes an array of strings and replaces them with '', except for every Xth label
 	xthLabels: function(labelsArray, x){
-		//TODO: this
+		//TODO: probably not needed for chart.js 2.0
 	}
 
 };

@@ -12,12 +12,21 @@
 <button ng-click="test1()">test 1</button>
 <br/>
 <br/>
+<!-- chart.js 1.0 with angular-chart -->
+<!--
 <div class="habitsLineChartContainer">
 <canvas id="line" class="chart chart-line" chart-data="data"
   chart-labels="labels" chart-legend="true" chart-series="series"
   chart-click="onClick" >
 </canvas>
 </div>
+-->
+<!-- chart.js 2.0 standalone -->
+
+<div class="habitsLineChartContainer">
+	<canvas id="habitsLineChart"></canvas>
+</div>
+
 <p>submit habit log</p>
 <form name="habitLogEntryForm" class="habitLogEntryForm" >
 	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate" />

@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('pdb.habits', ['chart.js', 'ngMessages'])
+/*
 .config(['ChartJsProvider', function (ChartJsProvider) {
 	// Configure all charts
 	ChartJsProvider.setOptions({
@@ -13,11 +14,11 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		datasetFill: false //whether to fill the dataset with a color
 	});
 }])
+*/
 .controller('HabitsCtrl', ['$scope', 'habitsAPI', 'userAPI',
 	function($scope, habitsAPI, userAPI) {
 	
 		var model = this;
-		$scope.chartUtils = PDB.chartUtils;
 		
 		$scope.habitLogEntry = {
 			logDate: '',
@@ -95,22 +96,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 						$scope.recentHabitLogs = response.data['habitLogs'];
 					}//else display some error message
 					
-					var labels = [];
-					var data = [[]];
-					var count = 0;
-					//console.log('reading recentHabitLogs');
-					//var debugMsg = '';
-					for(var key in $scope.recentHabitLogs){
-						labels[count] = $scope.recentHabitLogs[key]['logDate'];
-						data[0][count] = $scope.recentHabitLogs[key]['score'];
-						//debugMsg += '{' + labels[count] + ', ' + data[0][count] + '}, ';
-						count++;
-					}
-					//console.log(debugMsg);
-					
-					$scope.labels = labels;
-					$scope.data = data;
-					$scope.series = ['Habit Score'];
+					updateHabitsLineChart();
 				}
 			);
 		};
@@ -129,8 +115,52 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			return false;
 		};
 		
-	//private functions
-
+//private functions
+	
+	//update line chart using $scope.recentHabitLogs
+	var updateHabitsLineChart = function(){
+		var labels = [];
+		var data = [[]];
+		var count = 0;
+		//console.log('reading recentHabitLogs');
+		//var debugMsg = '';
+		for(var key in $scope.recentHabitLogs){
+			labels[count] = $scope.recentHabitLogs[key]['logDate'];
+			data[0][count] = $scope.recentHabitLogs[key]['score'];
+			//debugMsg += '{' + labels[count] + ', ' + data[0][count] + '}, ';
+			count++;
+		}
+		//console.log(debugMsg);
+		
+		$scope.labels = labels;
+		$scope.data = data;
+		$scope.series = ['Habit Score'];
+		
+		//TEST
+		var ctx = document.getElementById("habitsLineChart");
+		//console.log('chart context: ' + ctx);
+		$scope.habitsLineChart = new Chart(ctx, {
+			type: 'line',
+			//type: 'bar',
+			data: {
+				//labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+				labels: labels,
+				datasets: [{
+					label: 'Habit Score',
+					//data: [12, 19, 3, 5, 2, 3]
+					data: data[0]
+				}]
+			},
+			options:{
+				scales:{
+					yAxes:[{
+						ticks:{beginAtZero:true}
+					}]
+				}
+			}
+		});
+	};
+	
 	//init functions
 
 		//initial page setup: show habit scores for past month
