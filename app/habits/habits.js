@@ -71,6 +71,10 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 						$scope.getRecentHabitLogs($scope.habitTimeframe);
 					}
 				}
+			).then(
+				function(response){
+					document.location.reload(true);
+				}
 			);
 		};
 		
@@ -120,21 +124,16 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 	//update line chart using $scope.recentHabitLogs
 	var updateHabitsLineChart = function(){
 		var labels = [];
-		var data = [[]];
+		var data = [];
 		var count = 0;
-		//console.log('reading recentHabitLogs');
-		//var debugMsg = '';
 		for(var key in $scope.recentHabitLogs){
 			labels[count] = $scope.recentHabitLogs[key]['logDate'];
-			data[0][count] = $scope.recentHabitLogs[key]['score'];
-			//debugMsg += '{' + labels[count] + ', ' + data[0][count] + '}, ';
+			data[count] = $scope.recentHabitLogs[key]['score'];
 			count++;
 		}
-		//console.log(debugMsg);
 		
 		$scope.labels = labels;
 		$scope.data = data;
-		$scope.series = ['Habit Score'];
 		
 		//TEST
 		var ctx = document.getElementById("habitsLineChart");
@@ -148,7 +147,7 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				datasets: [{
 					label: 'Habit Score',
 					//data: [12, 19, 3, 5, 2, 3]
-					data: data[0]
+					data: data
 				}]
 			},
 			options:{
@@ -165,12 +164,6 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 
 		//initial page setup: show habit scores for past month
 		$scope.getRecentHabitLogs($scope.habitTimeframe);
-
-		/*
-		 $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-		 $scope.data = [[65, 59, 80, 81, 56, 55, 40]];
-		 $scope.series = ['Series A'];
-		 */
 	}
 ])
 /*
