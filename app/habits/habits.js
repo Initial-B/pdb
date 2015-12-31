@@ -68,12 +68,10 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 			habitsAPI.submitHabitLog(habitLogEntry).then(
 				function(response){
 					if(response.data['responseCode'] == 'success'){
-						$scope.getRecentHabitLogs($scope.habitTimeframe);
+						console.log('reloading page');
+						document.location.reload(true);
+						//$scope.getRecentHabitLogs($scope.habitTimeframe);
 					}
-				}
-			).then(
-				function(response){
-					document.location.reload(true);
 				}
 			);
 		};
@@ -88,7 +86,6 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				//get formatted relative date using moment.js
 				startDate = habitsAPI.daysAgoToDate(daysAgo);
 			}
-			console.log('calling habitsAPI.getHabitLogs() with startDate: ' + startDate);
 			
 			habitsAPI.getHabitLogs(startDate).then(
 				function(response){
@@ -138,6 +135,11 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		//TEST
 		var ctx = document.getElementById("habitsLineChart");
 		//console.log('chart context: ' + ctx);
+		
+		//destroy old chart instance, if exist
+		if($scope.habitsLineChart){
+			$scope.habitsLineChart.destroy();
+		}
 		$scope.habitsLineChart = new Chart(ctx, {
 			type: 'line',
 			//type: 'bar',
@@ -154,6 +156,28 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				scales:{
 					yAxes:[{
 						ticks:{beginAtZero:true}
+					}],
+					xAxes:[{
+						ticks:{
+							autoSkip: false //let the callback do the skipping
+							//maxRotation: 45,
+							/*
+							callback: function(tickValue, index, ticks) {
+								//console.log('[ticks.callback] entry point');
+								//if there are more than 10 labels, only show every 4th
+								if(ticks.length > 10){
+									if((index % 4) === 1
+									|| index === 1){
+										return tickValue;
+									}else{
+										//console.log('index ' + index
+										//+ ' blanked. tickValue: ' + tickValue);
+										return '';
+									}
+								}
+							}
+							*/
+						}
 					}]
 				}
 			}

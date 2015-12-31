@@ -28,10 +28,13 @@
 				function(response){
 					console.log('server response: ' + JSON.stringify(response.data));
 					if(response.data['newSessionID']){
+						
 						userAPI.setSessionID(response.data['newSessionID']);
-						if(response.data['responseCode'] == 'success'){
+						console.log('habitsAPI.getHabitLogs returned new sessionID: ' + response.data['newSessionID'] + ', setting as user sID');
+						
+						//if(response.data['responseCode'] == 'success'){
 							//do something? or handle in calling controller
-						}
+						//}
 					}
 					return response;
 				}
@@ -64,9 +67,10 @@
 					//console.log('server response: ' + JSON.stringify(response.data));
 					if(response.data['newSessionID']){
 						userAPI.setSessionID(response.data['newSessionID']);
-						if(response.data['responseCode'] == 'success'){
+						console.log('habitsAPI.getHabitLogs returned new sessionID: ' + response.data['newSessionID'] + ', setting as user sID');
+						//if(response.data['responseCode'] == 'success'){
 							//do something? or handle in calling controller
-						}
+						//}
 					}
 					//TEST: resend request on invalid session
 					else if(response.data['responseMessage'] 
@@ -93,8 +97,9 @@
 				}
 			).catch(
 				function(response) {
-					console.log('status: ' + response.status
-					+ ' data: ' + JSON.stringify(response.data));
+					console.log('error response: ' + PDB.utils.stringifySafe(response));
+					//console.log('status: ' + response.status
+					//+ ' data: ' + JSON.stringify(response.data));
 					return response;
 				}
 			);
