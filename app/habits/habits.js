@@ -70,7 +70,6 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 					if(response.data['responseCode'] == 'success'){
 						console.log('reloading page');
 						document.location.reload(true);
-						//$scope.getRecentHabitLogs($scope.habitTimeframe);
 					}
 				}
 			);
@@ -86,11 +85,9 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 				//get formatted relative date using moment.js
 				startDate = habitsAPI.daysAgoToDate(daysAgo);
 			}
-			
+			//get habit logs then update chart
 			habitsAPI.getHabitLogs(startDate).then(
 				function(response){
-					//console.log('getHabitLogs response: '
-					// + PDB.utils.stringifySafe(response));
 					if(response
 					&& response.data
 					&& response.data['responseCode'] == 'success'){
@@ -142,30 +139,27 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 		}
 		$scope.habitsLineChart = new Chart(ctx, {
 			type: 'line',
-			//type: 'bar',
 			data: {
-				//labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
 				labels: labels,
 				datasets: [{
 					label: 'Habit Score',
-					//data: [12, 19, 3, 5, 2, 3]
 					data: data
 				}]
 			},
 			options:{
+				legend:{display: false},
 				scales:{
 					yAxes:[{
 						ticks:{beginAtZero:true}
 					}],
 					xAxes:[{
 						ticks:{
-							autoSkip: false //let the callback do the skipping
-							//maxRotation: 45,
-							/*
+							autoSkip: false, //let the callback do label skipping
+							maxRotation: 45,
+							//called on tick, return value is set as label
 							callback: function(tickValue, index, ticks) {
-								//console.log('[ticks.callback] entry point');
-								//if there are more than 10 labels, only show every 4th
-								if(ticks.length > 10){
+								//if there are more than 8 labels, only show every 4th
+								if(ticks.length > 8){
 									if((index % 4) === 1
 									|| index === 1){
 										return tickValue;
@@ -174,9 +168,10 @@ angular.module('pdb.habits', ['chart.js', 'ngMessages'])
 										//+ ' blanked. tickValue: ' + tickValue);
 										return '';
 									}
+								}else{
+									return tickValue;
 								}
 							}
-							*/
 						}
 					}]
 				}
