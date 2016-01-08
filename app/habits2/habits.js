@@ -1,21 +1,8 @@
 'use strict';
 
-angular.module('pdb.habits', ['ngMessages'])
+angular.module('pdb.habits2', ['ngMessages'])
 /*
-.config(['ChartJsProvider', function (ChartJsProvider) {
-	// Configure all charts
-	ChartJsProvider.setOptions({
-		//colours: ['#FF5252', '#FF8A80'],
-		//responsive: false
-	});
-	// Configure all line charts
-	ChartJsProvider.setOptions('Line', {	
-		bezierCurve : false, //Whether the line is curved between points
-		datasetFill: false //whether to fill the dataset with a color
-	});
-}])
-*/
-.controller('HabitsCtrl', ['$scope', 'habitsAPI', 'userAPI',
+.controller('HabitsCtrl2', ['$scope', 'habitsAPI', 'userAPI',
 	function($scope, habitsAPI, userAPI) {
 	
 		var model = this;
@@ -185,10 +172,6 @@ angular.module('pdb.habits', ['ngMessages'])
 		$scope.getRecentHabitLogs($scope.habitTimeframe);
 	}
 ])
-/*
-	validation directives
-	TODO: combine input disabler code into these directives
-*/
 .directive("scoreInput", function() {
     return {
         restrict: "A",  
@@ -261,4 +244,6 @@ angular.module('pdb.habits', ['ngMessages'])
 			};
 		}
     };
-});
+})
+*/
+;

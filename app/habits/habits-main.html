@@ -1,32 +1,22 @@
 <p>view: habits</p>
-<button ng-click="getRecentHabitLogs()">Show Recent Habit Logs</button>
-	<label for="habitTimeframeSelect">range: </label>
-    <select name="habitTimeframeSelect" id="habitTimeframeSelect" ng-model="habitTimeframe">
-      <option value="">---Please select---</option>
-	  <option value="7">past week</option>
-	  <option value="30">past month</option>
-	  <option value="365">past year</option>
-	  <option value="-1">all time</option>
-    </select>
-<br/>
-<button ng-click="test1()">test 1</button>
-<br/>
-<br/>
-<!-- chart.js 1.0 with angular-chart -->
-<!--
-<div class="habitsLineChartContainer">
-<canvas id="line" class="chart chart-line" chart-data="data"
-  chart-labels="labels" chart-legend="true" chart-series="series"
-  chart-click="onClick" >
-</canvas>
+<div class="chartWidget">
+	<div class="habitsLineChartControls">
+		<button ng-click="getRecentHabitLogs()">Show Recent Habit Logs</button>
+		<label for="habitTimeframeSelect">range: </label>
+		<select name="habitTimeframeSelect" id="habitTimeframeSelect" ng-model="habitTimeframe">
+		  <option value="">---Please select---</option>
+		  <option value="7">past week</option>
+		  <option value="30">past month</option>
+		  <option value="365">past year</option>
+		  <option value="-1">all time</option>
+		</select>
+		<br/>
+		<button ng-click="test1()">test 1</button>
+	</div>
+	<div class="habitsLineChartContainer">
+		<canvas id="habitsLineChart"></canvas>
+	</div>
 </div>
--->
-<!-- chart.js 2.0 standalone -->
-
-<div class="habitsLineChartContainer">
-	<canvas id="habitsLineChart"></canvas>
-</div>
-
 <p>submit habit log</p>
 <form name="habitLogEntryForm" class="habitLogEntryForm" >
 	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate" />
@@ -92,42 +82,7 @@
 	<button ng-click="test2()">test 2</button>
 </form>
 
-<br/><br/>
-	
-<!--
-<form class="habitLogEntry" name="habitLogEntry">
-	date (YYYY-MM-DD): <input type="text" ng-model="habitLogEntry.logDate" />
-	<br/>
-	score (out of 100.00): 
-	<input type="text" 
-	class="scoreInput" 
-	ng-model="habitLogEntry.scorePercent" 
-	ng-disabled="habitLogEntry.scorePercentDisabled"
-	scorePercent
-	/>
-	-or- 
-	<input type="text" class="scoreInput"
-	ng-model="habitLogEntry.scorePoints"
-	ng-disabled="habitLogEntry.scorePointsDisabled"
-	scorePoints
-	/>
-	/ 
-	<input type="text" class="scoreInput" 
-	ng-model="habitLogEntry.maxPoints"
-	ng-disabled="habitLogEntry.maxPointsDisabled"
-	maxPoints
-	/>
-	<div ng-messages="habitLogEntry.$error" class="errors">
-		<span ng-message="scorePercent"> percentage scores must be between 0.00 and 100.00 (inclusive)
-		<span/>
-		<span ng-message="scorePoints">points scored must be less than maximum points</span>
-	</div>
-	<br/>
-	<br/>
-	<input type="button" ng-click="reset()" value="Reset" />
-    <input type="submit" ng-click="submitHabitLogEntryForm(habitLogEntry)" value="Submit" />
-</form>
--->
+<br/>
 <br/>
 <div class="habitLogsTableContainer">
 	<table class="habitLogsTable">

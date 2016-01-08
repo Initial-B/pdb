@@ -28,6 +28,18 @@
   content: "";
   padding: 0;
 }
+
+.chartWidget{
+	border: 1px solid #c1c1c1;
+	float: left;
+}
+.habitsLineChartControls{
+	border: 1px solid #c1c1c1;
+}
+.habitsLineChartContainer{
+	width: 600px;
+	height: 350px;
+}
 div.habitLogsTableContainer{
 	height: 275px;
 	overflow: scroll;
@@ -43,11 +55,7 @@ div.habitLogsTableContainer{
 .habitLogsTable tr:nth-child(even) {
   background-color: #ffffff;
 }
-.habitsLineChartContainer{
-	width: 600px;
-	height: 350px;
-	float: left;
-}
+
 .habitLogEntryForm .scoreInput{
 	width: 5em;
 }

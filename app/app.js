@@ -9,6 +9,7 @@ var pdbApp = angular.module('pdb', [
   'pdb.login',
   'pdb.finances',
   'pdb.habits',
+  'pdb.habits2',
   'pdb.version'
 ]);
 pdbApp.config(['$stateProvider','$urlRouterProvider',
@@ -36,6 +37,14 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 			url: '/habits',
 			templateUrl: 'habits/habits-main.html',
 			controller: 'HabitsCtrl',
+			data:{
+				requireLogin: true
+			}
+		})
+		.state('habits2',{
+			url: '/habits2',
+			templateUrl: 'habits2/habits-main.html',
+			controller: 'HabitsCtrl2',
 			data:{
 				requireLogin: true
 			}
