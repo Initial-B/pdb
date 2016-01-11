@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('pdb.habits2', ['ngMessages'])
-/*
+
 .controller('HabitsCtrl2', ['$scope', 'habitsAPI', 'userAPI',
 	function($scope, habitsAPI, userAPI) {
-	
+	/*
 		var model = this;
 		
 		$scope.habitLogEntry = {
@@ -243,7 +243,8 @@ angular.module('pdb.habits2', ['ngMessages'])
 				return true;
 			};
 		}
+		
     };
 })
 */
-;
+}]);
