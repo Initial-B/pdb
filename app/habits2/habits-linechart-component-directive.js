@@ -3,26 +3,26 @@ angular.module('pdb.habits2')
 //	function($scope, habitsAPI, userAPI) {
 .controller('ChartComponentController', ['habitsAPI', 'userAPI',
 	function(habitsAPI, userAPI) {
-		this.habitTimeframe = 30;//days prior to today
-		this.dataType = 'daily';//daily or 2 week average
+		this.habitTimeframe = "30";//days prior to today
+		this.filter = 'daily';//daily or moving2WeekAverage
 		
 		this.updateChart = function updateChart(){
 			console.log('updating chart component');
 		}.bind(this);
 		
 		function setHabitTimeframe(daysAgo){
-			habitTimeframe = daysAgo;
+			habitTimeframe = parseInt(daysAgo);
 			console.log('new habit timeframe: ' + habitTimeframe);
 		};
 		
-		function setDataType(type){
-			dataType = type;
+		function setFilter(f){
+			filter = f;
 		};
 		
 		this.test1 = function test1(){
 			setDataType('average');
 			console.log('habitTimeframe: ' + habitTimeframe
-			+ ' dataType: ' + dataType);
+			+ ' filter: ' + filter);
 		};
 	}
 ])
