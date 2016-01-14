@@ -121,15 +121,7 @@ pdbApp.config(['$stateProvider','$urlRouterProvider',
 	}
 ]);
 
-//include in controllers like so: $scope.chartUtils = PDB.chartUtils;
 //TODO: should this go in a separate file? a service?
-PDB.chartUtils = {
-	//takes an array of strings and replaces them with '', except for every Xth label
-	xthLabels: function(labelsArray, x){
-		//TODO: probably not needed for chart.js 2.0
-	}
-
-};
 PDB.utils = function(){
 	function isInt(value) {
 	  var x;

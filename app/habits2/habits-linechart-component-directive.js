@@ -8,11 +8,11 @@ angular.module('pdb.habits2')
 		this.filter = 'daily';//daily or moving2WeekAverage
 		this.habitsLineChart = null;
 		
-		this.update = function updateChart(){
+		this.update = function(){
 			var startDate = '0000-00-00';//default startDate ("all time")
 			var recentHabitLogs = null;
-			if(habitTimeframe){
-				startDate = habitsAPI.daysAgoToDate(habitTimeframe);
+			if(_this.habitTimeframe){
+				startDate = habitsAPI.daysAgoToDate(_this.habitTimeframe);
 			}
 			//get habit logs then update chart
 			habitsAPI.getHabitLogs(startDate).then(
@@ -30,7 +30,7 @@ angular.module('pdb.habits2')
 						data[count] = recentHabitLogs[key]['score'];
 						count++;
 					}
-					_this.updateChart(labels, data);
+					updateChart(labels, data);
 					
 				}
 			);
@@ -45,11 +45,12 @@ angular.module('pdb.habits2')
 	//======== private functions ============
 		function updateChart(labels, data){
 			console.log('updating chart component');
+			var ctx = document.getElementById("habitsLineChart");
 			//destroy old chart instance, if exist
-			if(habitsLineChart){
-				habitsLineChart.destroy();
+			if(_this.habitsLineChart){
+				_this.habitsLineChart.destroy();
 			}
-			habitsLineChart = new Chart(ctx, {
+			_this.habitsLineChart = new Chart(ctx, {
 				type: 'line',
 				data: {
 					labels: labels,
@@ -95,6 +96,10 @@ angular.module('pdb.habits2')
 		function setFilter(f){
 			filter = f;
 		};
+		
+	//====== init =======
+		this.update();
+	
 	}
 ])
 .directive('chartComponent', function(){
@@ -107,5 +112,4 @@ angular.module('pdb.habits2')
 		controllerAs: 'ctrl',
 		templateUrl: 'habits2/habits-linechart-component.html'
 	};
-})
-;
+});
