@@ -43,7 +43,6 @@ angular.module('pdb.habits2')
 						count++;
 					}
 					updateChart(labels, data);
-					
 				}
 			);
 		};
@@ -52,7 +51,7 @@ angular.module('pdb.habits2')
 			//var start = moment("2016-01-04","YYYY-MM-DD");
 			//var end = moment("2016-01-11","YYYY-MM-DD");
 
-			getMoving2WeekAverageData(_this.habitTimeframe);
+			getMoving2WeekAverageData(habitsAPI.daysAgoToDate(_this.habitTimeframe));
 		};
 		
 	//======== private functions ============
@@ -106,6 +105,8 @@ angular.module('pdb.habits2')
 				labels: [],
 				data: []
 			};
+			var endDate = moment();
+			
 			//use startDate to get labels starting from startDate - 14days
 			var adjustedStartDate = moment(startDate,"YYYY-MM-DD").subtract(14, 'days');
 			
@@ -117,12 +118,24 @@ angular.module('pdb.habits2')
 					&& response.data['responseCode'] == 'success'){
 						recentHabitLogs = response.data['habitLogs'];
 					}//else display some error message?
+					
+					//DEBUG
+					//console.log('response: ' + PDB.utils.stringifySafe(response));
+					
+					//DEBUG
+					//console.log('recentHabitLogs: ' + PDB.utils.stringifySafe(recentHabitLogs));
+					
 					var logs = [];//assoc. array [logDate => score]
 					for(var key in recentHabitLogs){
 						logs[recentHabitLogs[key]['logDate']] = recentHabitLogs[key]['score'];
 					}
+					
 					//DEBUG
-					console.log('logs: ' + PDB.utils.stringifySafe(logs));
+					/*
+					for(var key in logs){
+						console.log('logs[' + key + ']: ' + logs[key]);
+					}
+					*/
 					
 					var averageScores = [];//assoc. array [date => 2weekAvgScore]
 					
@@ -130,38 +143,53 @@ angular.module('pdb.habits2')
 					
 					//calculate sum of first two weeks
 					var sum = 0;
-					var date = moment(adjustedStartDate);//d will be iterated
-					while(date.diff(startDate,'days') >= 1){
+					var date = moment(adjustedStartDate);//date to be iterated during loops
+					
+					//DEBUG
+					//console.log('sum loop start date: ' + PDB.utils.stringifySafe(date)
+					//	+ ', diff in days from ' + PDB.utils.stringifySafe(startDate)
+					//	+ ': ' + date.diff(startDate,'days'));
+					
+					//continue to sum scores up to startDate (exclusive)
+					//diff should start at -14
+					while(date.diff(startDate,'days') <= -1){
 						if(logs[date.format('YYYY-MM-DD')]){
-							sum +=logs[date.format('YYYY-MM-DD')];
+							sum += parseFloat(logs[date.format('YYYY-MM-DD')]);
 						}
 						date.add(1, 'days');
 					}
 					console.log('sum of first 14 days of logs: ' + sum);
 					
-					//calculate 2wk average for each day between startDate and now
+					//calculate 2wk average for each day between startDate and endDate (inclusive)
 					var avgPeriodStartDate = moment(adjustedStartDate);
-					var date = moment(startDate);
-					while(date.diff(startDate,'days') >= 1){
-						averageScores[d.format('YYYY-MM-DD')] = sum/14;
+					date = moment(startDate);
+					
+					//DEBUG
+					console.log('average scores between ' + date.format('YYYY-MM-DD')
+					+ ' and ' + endDate.format('YYYY-MM-DD'));
+					
+					//TODO: why does setting it to <= 0 add two days?
+					while(date.diff(endDate,'days') <= -1){
+						averageScores[date.format('YYYY-MM-DD')] = sum/14;
 						//DEBUG
 						console.log('average score for '
 							+ date.format('YYYY-MM-DD')
 							+ ': ' + sum/14);
-						//iterate sum
-							//subtract first score from sum
-							sum -= logs(avgPeriodStartDate.format('YYYY-MM-DD'));
-							//add score of date that was just averaged
-							if(logs[d.format('YYYY-MM-DD')]){
-								sum += logs[date.format('YYYY-MM-DD')];
-							}
+						//subtract first score from sum
+						sum -= parseFloat(logs[avgPeriodStartDate.format('YYYY-MM-DD')]);
+						//add score of date that was just averaged
+						if(logs[date.format('YYYY-MM-DD')]){
+							sum += parseFloat(logs[date.format('YYYY-MM-DD')]);
+						}
 						//iterate dates
-							avgPeriodStartDate.add(1, 'days');
-							date.add(1, 'days');
+						avgPeriodStartDate.add(1, 'days');
+						date.add(1, 'days');
 					}
+					
 					//DEBUG
-					console.log('averageScores[]: '
-						+ PDB.utils.stringifySafe(averageScores));
+					//for(var key in averageScores){
+					//	console.log('avg. on ' + key + ': ' + averageScores[key]);
+					//}
 				}
 			);
 		};
