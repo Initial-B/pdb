@@ -20,12 +20,18 @@ angular.module('pdb.habits2')
 				data: []
 			};
 			if(_this.filter === 'moving2WeekAverage'){
-				combinedData = getMoving2WeekAverageData(startDate);
+				getMoving2WeekAverageData(startDate).then(function(combinedData){
+					updateChart(combinedData.labels, combinedData.data);
+				});
+				//DEBUG stop here until both filters get combindedData
+				return;
 			}else{
-				combinedData = getDailyData(startDate);
+				getDailyData(startDate).then(function(combinedData){
+					updateChart(combinedData.labels, combinedData.data);
+				});
 			}
 			
-			
+			//TODO: move this to getDailyData
 			//get habit logs then update chart
 			habitsAPI.getHabitLogs(startDate).then(
 				function(response){
@@ -51,7 +57,17 @@ angular.module('pdb.habits2')
 			//var start = moment("2016-01-04","YYYY-MM-DD");
 			//var end = moment("2016-01-11","YYYY-MM-DD");
 
-			getMoving2WeekAverageData(habitsAPI.daysAgoToDate(_this.habitTimeframe));
+			getMoving2WeekAverageData(habitsAPI.daysAgoToDate(_this.habitTimeframe))
+				.then(function(averageScores){
+					var count = 0;
+					for(var key in averageScores){
+						labels[count] = key;
+						data[count] = averageScores[key];
+						count++;
+					}
+				});
+
+			
 		};
 		
 	//======== private functions ============
@@ -105,13 +121,13 @@ angular.module('pdb.habits2')
 				labels: [],
 				data: []
 			};
-			var endDate = moment();
+			var endDate = moment().startOf('day');//12am of current day
 			
 			//use startDate to get labels starting from startDate - 14days
 			var adjustedStartDate = moment(startDate,"YYYY-MM-DD").subtract(14, 'days');
 			
-			//get habit logs
-			habitsAPI.getHabitLogs(adjustedStartDate.format('YYYY-MM-DD')).then(
+			//get combinedData from habit logs
+			return habitsAPI.getHabitLogs(adjustedStartDate.format('YYYY-MM-DD')).then(
 				function(response){
 					if(response
 					&& response.data
@@ -168,13 +184,8 @@ angular.module('pdb.habits2')
 					console.log('average scores between ' + date.format('YYYY-MM-DD')
 					+ ' and ' + endDate.format('YYYY-MM-DD'));
 					
-					//TODO: why does setting it to <= 0 add two days?
-					while(date.diff(endDate,'days') <= -1){
+					while(date.diff(endDate,'days') <= 0){
 						averageScores[date.format('YYYY-MM-DD')] = sum/14;
-						//DEBUG
-						console.log('average score for '
-							+ date.format('YYYY-MM-DD')
-							+ ': ' + sum/14);
 						//subtract first score from sum
 						sum -= parseFloat(logs[avgPeriodStartDate.format('YYYY-MM-DD')]);
 						//add score of date that was just averaged
@@ -187,9 +198,17 @@ angular.module('pdb.habits2')
 					}
 					
 					//DEBUG
-					//for(var key in averageScores){
-					//	console.log('avg. on ' + key + ': ' + averageScores[key]);
-					//}
+					for(var key in averageScores){
+						console.log('avg. on ' + key + ': ' + averageScores[key]);
+					}
+					
+					var count = 0;
+					for(var key in averageScores){
+						combinedData.labels[count] = key;
+						combinedData.data[count] = averageScores[key];
+						count++;
+					}
+					return combinedData;
 				}
 			);
 		};
