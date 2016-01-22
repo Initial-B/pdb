@@ -30,27 +30,6 @@ angular.module('pdb.habits2')
 					updateChart(combinedData.labels, combinedData.data);
 				});
 			}
-			
-			//TODO: move this to getDailyData
-			//get habit logs then update chart
-			habitsAPI.getHabitLogs(startDate).then(
-				function(response){
-					if(response
-					&& response.data
-					&& response.data['responseCode'] == 'success'){
-						recentHabitLogs = response.data['habitLogs'];
-					}//else display some error message?
-					var labels = [];
-					var data = [];
-					var count = 0;
-					for(var key in recentHabitLogs){
-						labels[count] = recentHabitLogs[key]['logDate'];
-						data[count] = recentHabitLogs[key]['score'];
-						count++;
-					}
-					updateChart(labels, data);
-				}
-			);
 		};
 				
 		this.test1 = function test1(){
@@ -66,8 +45,6 @@ angular.module('pdb.habits2')
 						count++;
 					}
 				});
-
-			
 		};
 		
 	//======== private functions ============
@@ -135,36 +112,17 @@ angular.module('pdb.habits2')
 						recentHabitLogs = response.data['habitLogs'];
 					}//else display some error message?
 					
-					//DEBUG
-					//console.log('response: ' + PDB.utils.stringifySafe(response));
-					
-					//DEBUG
-					//console.log('recentHabitLogs: ' + PDB.utils.stringifySafe(recentHabitLogs));
-					
 					var logs = [];//assoc. array [logDate => score]
 					for(var key in recentHabitLogs){
 						logs[recentHabitLogs[key]['logDate']] = recentHabitLogs[key]['score'];
 					}
 					
-					//DEBUG
-					/*
-					for(var key in logs){
-						console.log('logs[' + key + ']: ' + logs[key]);
-					}
-					*/
-					
 					var averageScores = [];//assoc. array [date => 2weekAvgScore]
 					
-					//calculate first 2-week average
-					
+				//calculate first 2-week average
 					//calculate sum of first two weeks
 					var sum = 0;
 					var date = moment(adjustedStartDate);//date to be iterated during loops
-					
-					//DEBUG
-					//console.log('sum loop start date: ' + PDB.utils.stringifySafe(date)
-					//	+ ', diff in days from ' + PDB.utils.stringifySafe(startDate)
-					//	+ ': ' + date.diff(startDate,'days'));
 					
 					//continue to sum scores up to startDate (exclusive)
 					//diff should start at -14
@@ -176,7 +134,7 @@ angular.module('pdb.habits2')
 					}
 					console.log('sum of first 14 days of logs: ' + sum);
 					
-					//calculate 2wk average for each day between startDate and endDate (inclusive)
+				//calculate 2wk average for each day between startDate and endDate (inclusive)
 					var avgPeriodStartDate = moment(adjustedStartDate);
 					date = moment(startDate);
 					
@@ -213,7 +171,28 @@ angular.module('pdb.habits2')
 			);
 		};
 		function getDailyData(startDate){
-		
+			var combinedData = {
+				labels: [],
+				data: []
+			};
+			return habitsAPI.getHabitLogs(startDate).then(
+				function(response){
+					if(response
+					&& response.data
+					&& response.data['responseCode'] == 'success'){
+						recentHabitLogs = response.data['habitLogs'];
+					}//else display some error message?
+					var labels = [];
+					var data = [];
+					var count = 0;
+					for(var key in recentHabitLogs){
+						combinedData.labels[count] = recentHabitLogs[key]['logDate']; 
+						combinedData.data[count] = recentHabitLogs[key]['score'];
+						count++;
+					}
+					return combinedData;
+				}
+			);
 		};
 		
 		function setHabitTimeframe(daysAgo){
