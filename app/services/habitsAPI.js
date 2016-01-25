@@ -105,6 +105,17 @@
 			);
 		};
 		
+		
+		//like getHabitLogs, but trims 0-score logs from start and end
+		function getTrimmedHabitLogs(startDate){
+			return getHabitLogs(startDate).then(function(response){
+				if(response
+				
+				var firstNonZeroLogIndex = 0;
+				
+			
+			});
+		}
 
 		
 		function daysAgoToDate(daysAgo){
