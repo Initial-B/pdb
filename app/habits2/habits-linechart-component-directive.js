@@ -38,7 +38,7 @@ angular.module('pdb.habits2')
 		this.test1 = function test1(){
 			//var start = moment("2016-01-04","YYYY-MM-DD");
 			//var end = moment("2016-01-11","YYYY-MM-DD");
-
+			/*
 			getMoving2WeekAverageData(habitsAPI.daysAgoToDate(_this.habitTimeframe))
 				.then(function(averageScores){
 					var count = 0;
@@ -48,6 +48,7 @@ angular.module('pdb.habits2')
 						count++;
 					}
 				});
+				*/
 		};
 		
 	//======== private functions ============
@@ -104,7 +105,7 @@ angular.module('pdb.habits2')
 			
 		//1. get boundary dates (endDate, startDate minus 13 days)
 			endDate = endDate.startOf('day');
-			var avgStartDate = moment(startDate).startOf('day').subtract(13, 'days'));
+			var avgStartDate = moment(startDate).startOf('day').subtract(13, 'days');
 			
 		//2. retrieve habit logs for this window
 		
@@ -202,7 +203,12 @@ angular.module('pdb.habits2')
 					if(response
 					&& response.data
 					&& response.data['responseCode'] == 'success'){
-						recentHabitLogs = response.data['habitLogs'];
+						//trim start + end of habit logs
+						recentHabitLogs = habitsAPI.trimHabitLogs(
+							response.data['habitLogs'],
+							true,
+							true
+						);
 					}//else display some error message?
 					
 					var logs = [];//assoc. array [logDate => score]
@@ -274,7 +280,12 @@ angular.module('pdb.habits2')
 					if(response
 					&& response.data
 					&& response.data['responseCode'] == 'success'){
-						recentHabitLogs = response.data['habitLogs'];
+						//trim start of habit logs
+						recentHabitLogs = habitsAPI.trimHabitLogs(
+							response.data['habitLogs'],
+							true,
+							false
+						);
 					}//else display some error message?
 					var labels = [];
 					var data = [];
@@ -288,7 +299,7 @@ angular.module('pdb.habits2')
 				}
 			);
 		};
-		
+
 		function setHabitTimeframe(daysAgo){
 			habitTimeframe = parseInt(daysAgo);
 			console.log('new habit timeframe: ' + habitTimeframe);

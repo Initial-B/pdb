@@ -106,16 +106,34 @@
 		};
 		
 		
-		//like getHabitLogs, but trims 0-score logs from start and end
-		function getTrimmedHabitLogs(startDate){
-			return getHabitLogs(startDate).then(function(response){
-				if(response
-				
-				var firstNonZeroLogIndex = 0;
-				
-			
-			});
-		}
+		//trims 0-score logs from start and end
+		function trimHabitLogs(habitLogs, trimStart, trimEnd){
+			var firstNonZeroLogIndex = 0;
+			var lastNonZeroLogIndex = habitLogs.length-1;
+			if(trimStart){
+				for(var x = 0;x < habitLogs.length;x++){
+					if(parseFloat(habitLogs[x]['score']) !== 0){
+						firstNonZeroLogIndex = x;
+						break;
+					}
+				}
+			}
+			if(trimEnd){
+				for(var x = habitLogs.length-1;x >= 0;x--){
+					if(parseFloat(habitLogs[x]['score']) !== 0){
+						lastNonZeroLogIndex = x;
+						break;
+					}
+				}
+			}
+			var trimmedLogs = [];
+			var index = 0;
+			for(var x = firstNonZeroLogIndex;x <= lastNonZeroLogIndex;x++){
+				trimmedLogs[index] = habitLogs[x];
+				index++;
+			}
+			return trimmedLogs;
+		};
 
 		
 		function daysAgoToDate(daysAgo){
@@ -148,6 +166,7 @@
 		return{
 			submitHabitLog: submitHabitLog,
 			getHabitLogs: getHabitLogs,
+			trimHabitLogs: trimHabitLogs,
 			daysAgoToDate: daysAgoToDate,
 			averageScore: averageScore
 		}
