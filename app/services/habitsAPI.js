@@ -108,6 +108,7 @@
 		
 		//trims 0-score logs from start and end
 		function trimHabitLogs(habitLogs, trimStart, trimEnd){
+			console.log('habitsAPI.trimHabitLogs() before: ' + PDB.utils.stringifySafe(habitLogs));
 			var firstNonZeroLogIndex = 0;
 			var lastNonZeroLogIndex = habitLogs.length-1;
 			if(trimStart){
@@ -132,6 +133,7 @@
 				trimmedLogs[index] = habitLogs[x];
 				index++;
 			}
+			console.log('habitsAPI.trimHabitLogs() after: ' + PDB.utils.stringifySafe(trimmedLogs));
 			return trimmedLogs;
 		};
 

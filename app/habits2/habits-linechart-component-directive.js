@@ -23,7 +23,7 @@ angular.module('pdb.habits2')
 				var endDateMoment = moment();
 				var startDateMoment = moment(startDate, 'YYYY-MM-DD');
 				
-				getMoving2WeekAverageData0(startDateMoment, endDateMoment).then(function(combinedData){
+				getMoving2WeekAverageData(startDateMoment, endDateMoment).then(function(combinedData){
 					updateChart(combinedData.labels, combinedData.data);
 				});
 				//DEBUG stop here until both filters get combindedData
@@ -102,163 +102,67 @@ angular.module('pdb.habits2')
 				labels: [],
 				data: []
 			};
-			
 		//1. get boundary dates (endDate, startDate minus 13 days)
 			endDate = endDate.startOf('day');
 			var avgStartDate = moment(startDate).startOf('day').subtract(13, 'days');
 			
-		//2. retrieve habit logs for this window
-		
-			
-			var endDate = moment().startOf('day');//endDate = 12am of current day
-			
-			//get labels starting from startDate minus 13 days
-			var adjustedStartDate = moment(startDate,"YYYY-MM-DD").startOf('day').subtract(13, 'days');
-			
-			
-			
-			//assemble combinedData from habit logs
-			return habitsAPI.getHabitLogs(adjustedStartDate.format('YYYY-MM-DD')).then(
+		//2. retrieve habit logs for this time window
+			return habitsAPI.getHabitLogs(avgStartDate.format('YYYY-MM-DD')).then(
 				function(response){
 					if(response
 					&& response.data
 					&& response.data['responseCode'] == 'success'){
 						recentHabitLogs = response.data['habitLogs'];
 					}//else display some error message?
+		//3. Adjust boundary dates based on logs retrieved
+		// This trims dates without logs from start + end of data.
+		// In 4 and 5, remaining dates without logs will be counted as 0-score days.
+					//set avgStartDate to earliest date with log
+					avgStartDate = moment(recentHabitLogs[0]['logDate'],'YYYY-MM-DD');
+					//set endDate to latest date with log
+					endDate = moment(recentHabitLogs[recentHabitLogs.length-1]['logDate'],'YYYY-MM-DD');
 					
-					var logs = [];//assoc. array [logDate => score]
+					//create array of logs indexed by date
+					var logs = [];
 					for(var key in recentHabitLogs){
 						logs[recentHabitLogs[key]['logDate']] = recentHabitLogs[key]['score'];
 					}
-					
 					var averageScores = [];//assoc. array [date => 2weekAvgScore]
 					
-				//calculate first 2-week average
+		//4. calculate first 2-week average
 					//calculate sum of first two weeks
 					var sum = 0;
-					var date = moment(adjustedStartDate);//date to be iterated during loops
+					var avgEndDate = moment(avgStartDate).add(13, 'days');
 					
-					//continue to sum scores up to startDate (exclusive)
-					//diff should start at -14
-					while(date.diff(startDate,'days') <= 0){
-						if(logs[date.format('YYYY-MM-DD')]){
-							sum += parseFloat(logs[date.format('YYYY-MM-DD')]);
+					//sum up scores between avgStart and avgEnd (inclusive)
+					var dateIter = moment(avgStartDate);//date to be iterated during loop
+
+					while(dateIter.diff(avgEndDate,'days') <= 0){
+						if(logs[dateIter.format('YYYY-MM-DD')]){
+							sum += parseFloat(logs[dateIter.format('YYYY-MM-DD')]);
 						}
-						date.add(1, 'days');
+						dateIter.add(1, 'days');
 					}
-					console.log('sum of first 14 days of logs: ' + sum);
 					
-				//calculate 2wk average for each day between startDate and endDate (inclusive)
-					var avgPeriodStartDate = moment(adjustedStartDate);
-					date = moment(startDate);
-					
-					//DEBUG
-					console.log('average scores between ' + date.format('YYYY-MM-DD')
-					+ ' and ' + endDate.format('YYYY-MM-DD'));
-					
-					while(date.diff(endDate,'days') <= 0){
-						averageScores[date.format('YYYY-MM-DD')] = sum/14;
+		//5. Calculate 2wk average for each day between startDate and endDate (inclusive)
+					console.log('calculating average scores between '
+						+ avgEndDate.format('YYYY-MM-DD')
+						+ ' and ' + endDate.format('YYYY-MM-DD'));
+					while(avgEndDate.diff(endDate,'days') <= 0){
+						//calculate the average for the last day of the (2 week) average window
+						averageScores[avgEndDate.format('YYYY-MM-DD')] = sum/14;
 						//subtract first score from sum
-						sum -= parseFloat(logs[avgPeriodStartDate.format('YYYY-MM-DD')]);
-						//add score of date that was just averaged
-						if(logs[date.format('YYYY-MM-DD')]){
-							sum += parseFloat(logs[date.format('YYYY-MM-DD')]);
+						if(logs[avgStartDate.format('YYYY-MM-DD')]){
+							sum -= parseFloat(logs[avgStartDate.format('YYYY-MM-DD')]);
 						}
-						//iterate dates
-						avgPeriodStartDate.add(1, 'days');
-						date.add(1, 'days');
-					}
-					
-					//DEBUG
-					for(var key in averageScores){
-						console.log('avg. on ' + key + ': ' + averageScores[key]);
-					}
-					
-					var count = 0;
-					for(var key in averageScores){
-						combinedData.labels[count] = key;
-						combinedData.data[count] = averageScores[key];
-						count++;
-					}
-					return combinedData;
-				}
-			);
-		};
-		
-		
-		//previous version (gets past 14 days, not including today)
-		function getMoving2WeekAverageData0(startDate){
-			var combinedData = {
-				labels: [],
-				data: []
-			};
-			var endDate = moment().startOf('day');//12am of current day
-			
-			//use startDate to get labels starting from startDate - 14days
-			var adjustedStartDate = moment(startDate,"YYYY-MM-DD").subtract(14, 'days');
-			
-			//get combinedData from habit logs
-			return habitsAPI.getHabitLogs(adjustedStartDate.format('YYYY-MM-DD')).then(
-				function(response){
-					if(response
-					&& response.data
-					&& response.data['responseCode'] == 'success'){
-						//trim start + end of habit logs
-						recentHabitLogs = habitsAPI.trimHabitLogs(
-							response.data['habitLogs'],
-							true,
-							true
-						);
-					}//else display some error message?
-					
-					var logs = [];//assoc. array [logDate => score]
-					for(var key in recentHabitLogs){
-						logs[recentHabitLogs[key]['logDate']] = recentHabitLogs[key]['score'];
-					}
-					
-					var averageScores = [];//assoc. array [date => 2weekAvgScore]
-					
-				//calculate first 2-week average
-					//calculate sum of first two weeks
-					var sum = 0;
-					var date = moment(adjustedStartDate);//date to be iterated during loops
-					
-					//continue to sum scores up to startDate (exclusive)
-					//diff should start at -14
-					while(date.diff(startDate,'days') <= -1){
-						if(logs[date.format('YYYY-MM-DD')]){
-							sum += parseFloat(logs[date.format('YYYY-MM-DD')]);
+						//iterate average boundary dates
+						avgStartDate.add(1, 'days');
+						avgEndDate.add(1, 'days');
+						//average window now has new last score, so add it to the sum
+						if(logs[avgEndDate.format('YYYY-MM-DD')]){
+							sum += parseFloat(logs[avgEndDate.format('YYYY-MM-DD')]);
 						}
-						date.add(1, 'days');
-					}
-					console.log('sum of first 14 days of logs: ' + sum);
-					
-				//calculate 2wk average for each day between startDate and endDate (inclusive)
-					var avgPeriodStartDate = moment(adjustedStartDate);
-					date = moment(startDate);
-					
-					//DEBUG
-					console.log('average scores between ' + date.format('YYYY-MM-DD')
-					+ ' and ' + endDate.format('YYYY-MM-DD'));
-					
-					while(date.diff(endDate,'days') <= 0){
-						averageScores[date.format('YYYY-MM-DD')] = sum/14;
-						//subtract first score from sum
-						sum -= parseFloat(logs[avgPeriodStartDate.format('YYYY-MM-DD')]);
-						//add score of date that was just averaged
-						if(logs[date.format('YYYY-MM-DD')]){
-							sum += parseFloat(logs[date.format('YYYY-MM-DD')]);
-						}
-						//iterate dates
-						avgPeriodStartDate.add(1, 'days');
-						date.add(1, 'days');
-					}
-					
-					//DEBUG
-					for(var key in averageScores){
-						console.log('avg. on ' + key + ': ' + averageScores[key]);
-					}
-					
+					}	
 					var count = 0;
 					for(var key in averageScores){
 						combinedData.labels[count] = key;
@@ -281,11 +185,7 @@ angular.module('pdb.habits2')
 					&& response.data
 					&& response.data['responseCode'] == 'success'){
 						//trim start of habit logs
-						recentHabitLogs = habitsAPI.trimHabitLogs(
-							response.data['habitLogs'],
-							true,
-							false
-						);
+						recentHabitLogs = response.data['habitLogs'];
 					}//else display some error message?
 					var labels = [];
 					var data = [];
