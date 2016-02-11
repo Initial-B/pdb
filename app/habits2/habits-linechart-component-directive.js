@@ -1,12 +1,22 @@
 angular.module('pdb.habits2')
-//.controller('ChartComponentController', ['$scope', 'habitsAPI', 'userAPI',
-//	function($scope, habitsAPI, userAPI) {
-.controller('ChartComponentController', ['habitsAPI', 'userAPI',
-	function(habitsAPI, userAPI) {
+.controller('ChartComponentController', ['$scope', 'habitsAPI', 'userAPI',
+	function($scope, habitsAPI, userAPI) {
 		var _this = this;
-		this.habitTimeframe = 30;//days prior to today
+		this.habitTimeframe = "30";//days prior to today
 		this.filter = 'daily';//daily or moving2WeekAverage
 		this.habitsLineChart = null;
+		
+		//update on filter selector change
+		$scope.$watch(
+			//returns the value to be watched (preferable to using a string to refer to a var)
+			function(){return _this.filter;},
+			//update component if filter is defined
+			function(value){
+				console.log('filter selected: ' + value);
+				if(value){
+					_this.update();
+				}
+		});
 		
 		this.update = function(){
 			var startDate = '0000-00-00';//default startDate ("all time")
@@ -14,7 +24,6 @@ angular.module('pdb.habits2')
 			if(_this.habitTimeframe){
 				startDate = habitsAPI.daysAgoToDate(_this.habitTimeframe);
 			}
-			
 			var combinedData = {
 				labels: [],
 				data: []
@@ -33,22 +42,6 @@ angular.module('pdb.habits2')
 					updateChart(combinedData.labels, combinedData.data);
 				});
 			}
-		};
-				
-		this.test1 = function test1(){
-			//var start = moment("2016-01-04","YYYY-MM-DD");
-			//var end = moment("2016-01-11","YYYY-MM-DD");
-			/*
-			getMoving2WeekAverageData(habitsAPI.daysAgoToDate(_this.habitTimeframe))
-				.then(function(averageScores){
-					var count = 0;
-					for(var key in averageScores){
-						labels[count] = key;
-						data[count] = averageScores[key];
-						count++;
-					}
-				});
-				*/
 		};
 		
 	//======== private functions ============
@@ -199,19 +192,6 @@ angular.module('pdb.habits2')
 				}
 			);
 		};
-
-		function setHabitTimeframe(daysAgo){
-			habitTimeframe = parseInt(daysAgo);
-			console.log('new habit timeframe: ' + habitTimeframe);
-		};
-		
-		function setFilter(f){
-			filter = f;
-		};
-		
-	//====== init =======
-		this.update();
-	
 	}
 ])
 .directive('chartComponent', function(){

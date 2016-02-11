@@ -1,5 +1,4 @@
 <div class="habitsLineChartControls">
-	<button class="updateButton" ng-click="ctrl.update()">Update</button>
 	<div class="filterContainer">
 		<label>
 			<input type="radio" ng-model="ctrl.filter" value="daily">
@@ -11,15 +10,13 @@
 		</label>
 	</div>
 	<label for="habitTimeframeSelect">range: </label>
-	<select name="habitTimeframeSelect" id="habitTimeframeSelect" ng-model="ctrl.habitTimeframe">
-	  <option value="">---Please select---</option>
+	<select name="habitTimeframeSelect" id="habitTimeframeSelect" ng-model="ctrl.habitTimeframe"
+	ng-change="ctrl.update()">
 	  <option value="7">past week</option>
 	  <option value="30">past month</option>
 	  <option value="365">past year</option>
 	  <option value="-1">all time</option>
 	</select>
-	<br/>
-	<button ng-click="ctrl.test1()">test 1</button>
 </div>
 <div class="habitsLineChartContainer">
 	<canvas id="habitsLineChart"></canvas>
